@@ -1,344 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LookAt</title>
-    <link rel="shortcut icon" href="Logo2.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/form_style.css">
-    <link rel="stylesheet" href="styleaccount.css">
-    <script defer src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LookAt</title>
+  <link rel="shortcut icon" href="Logo2.png" type="image/x-icon" />
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <link rel="stylesheet" href="css/form_style.css" />
+  <link rel="stylesheet" href="styleaccount.css" />
+  <script defer src="https://kit.fontawesome.com/a076d05399.js"></script>
 </head>
 <body>
 
 <center>
-    <nav class="navbar">
-        <a href="index(Home).html">
-            <img src="Logo-modified (1).png" alt="LookAt Logo" class="logo">
-        </a>
-    </nav>
+  <nav class="navbar">
+    <a href="index(Home).html">
+      <img src="Logo-modified (1).png" alt="LookAt Logo" class="logo" />
+    </a>
+  </nav>
 </center>
 
 <div class="alert" id="msg"></div>
 <div class="container" id="container">
-    <div class="form-container sign-up-container">
-        <form id="signupForm">
-            <h1>Create Account</h1>
-            <div class="social-container">
-                <button type="button" id="facebook-login" class="social"><i class="fab fa-facebook-f"></i></button>
-                <button type="button" id="google-login" class="social"><i class="fab fa-google"></i></button>
-            </div>
-            <span>Or Use Your Email For Registration</span>
-            <input type="text" placeholder="Name" id="name" required />
-            <input type="email" placeholder="Email" id="email" required />
-            <input type="password" placeholder="Password" id="password" required />
-            <input type="password" placeholder="Confirm Password" id="password2" required />
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
+  <!-- Sign Up Form -->
+  <div class="form-container sign-up-container">
+    <form id="signupForm">
+      <h1>Create Account</h1>
+      <div class="social-container">
+        <button type="button" id="facebook-login" class="social"><i class="fab fa-facebook-f"></i></button>
+        <button type="button" id="google-login" class="social"><i class="fab fa-google"></i></button>
+      </div>
+      <span>Or Use Your Email For Registration</span>
+      <input type="text" placeholder="Name" id="name" required />
+      <input type="email" placeholder="Email" id="email" required />
+      <input type="password" placeholder="Password" id="password" required />
+      <input type="password" placeholder="Confirm Password" id="password2" required />
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
 
-    <div class="form-container sign-in-container">
-        <form id="signinForm">
-            <h1>Sign In</h1>
-            <div class="social-container">
-                <button type="button" id="facebook-login-signin" class="social"><i class="fab fa-facebook-f"></i></button>
-                <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
-            </div>
-            <span>Or Use Your Email Account</span>
-            <input type="email" placeholder="Email" id="signin-email" required />
-            <input type="password" placeholder="Password" id="signin-password" required />
-            <a href="#" id="forgot-password">Forgot Your Password?</a>
-            <button type="submit">Sign In</button>
-        </form>
-    </div>
+  <!-- Sign In Form -->
+  <div class="form-container sign-in-container">
+    <form id="signinForm">
+      <h1>Sign In</h1>
+      <div class="social-container">
+        <button type="button" id="facebook-login-signin" class="social"><i class="fab fa-facebook-f"></i></button>
+        <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
+      </div>
+      <span>Or Use Your Email Account</span>
+      <input type="email" placeholder="Email" id="signin-email" required />
+      <input type="password" placeholder="Password" id="signin-password" required />
+      <a href="#" id="forgot-password">Forgot Your Password?</a>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
 
-    <div class="overlay-container">
-        <div class="overlay">
-            <div class="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>Are You Ready To See Again The Future?</p>
-                <button class="ghost" id="signIn">Sign In</button>
-            </div>
-            <div class="overlay-panel overlay-right">
-                <h1>Hello Seer</h1>
-                <p>Come With Us We Will Show You The Future</p>
-                <button class="ghost" id="signUp">Sign Up</button>
-            </div>
-        </div>
+  <!-- Overlay Panel -->
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1>Welcome Back!</h1>
+        <p>Are You Ready To See Again The Future?</p>
+        <button class="ghost" id="signIn">Sign In</button>
+      </div>
+      <div class="overlay-panel overlay-right">
+        <h1>Hello Seer</h1>
+        <p>Come With Us We Will Show You The Future</p>
+        <button class="ghost" id="signUp">Sign Up</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <script type="module">
-    // Firebase Import & Initialization
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword, 
-        signInWithPopup, 
-        GoogleAuthProvider, 
-        FacebookAuthProvider,
-        sendPasswordResetEmail
-    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
-    import { 
-        getFirestore, 
-        doc, 
-        setDoc, 
-        getDoc,
-        updateDoc 
-    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    FacebookAuthProvider,
+    sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    updateDoc
+  } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
+  const firebaseConfig = {
+    apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
     authDomain: "rmcompany-c4705.firebaseapp.com",
     projectId: "rmcompany-c4705",
-    storageBucket: "rmcompany-c4705.firebasestorage.app",
+    storageBucket: "rmcompany-c4705.appspot.com",
     messagingSenderId: "474034947608",
-    appId: "1:474034947608:web:66d6fc74ad73b53cf9656d",
-    measurementId: "G-1BN7CYFR96"
-    };
+    appId: "1:474034947608:web:66d6fc74ad73b53cf9656d"
+  };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    // Show message with CSS styling
-    function showMessage(message, isError = false) {
-        const msgElement = document.getElementById('msg');
-        msgElement.textContent = message;
-        msgElement.style.display = 'block';
-        msgElement.style.backgroundColor = isError? '#f8d7da': '#d4edda';
-        msgElement.style.color = isError? '#721c24': '#155724';
-        msgElement.style.border = isError? '1px solid #f5c6cb': '1px solid #c3e6cb';
-        msgElement.style.padding = '10px';
-        msgElement.style.borderRadius = '5px';
-        msgElement.style.marginBottom = '15px';
-        
-        // Hide message after 3 seconds
-        setTimeout(() => {
-            msgElement.style.display = 'none';
-        }, 3000);
-    }
+  function showMessage(message, isError = false) {
+    const msgElement = document.getElementById('msg');
+    msgElement.textContent = message;
+    msgElement.style.display = 'block';
+    msgElement.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
+    msgElement.style.color = isError ? '#721c24' : '#155724';
+    msgElement.style.border = isError ? '1px solid #f5c6cb' : '1px solid #c3e6cb';
+    msgElement.style.padding = '10px';
+    msgElement.style.borderRadius = '5px';
+    msgElement.style.marginBottom = '15px';
 
-    // Toggle Sign-In & Sign-Up Panels
-    document.getElementById('signUp').addEventListener('click', () => {
-        document.getElementById('container').classList.add("right-panel-active");
-    });
+    setTimeout(() => {
+      msgElement.style.display = 'none';
+    }, 3000);
+  }
 
-    document.getElementById('signIn').addEventListener('click', () => {
-        document.getElementById('container').classList.remove("right-panel-active");
-    });
+  // Toggle Panel
+  document.getElementById('signUp').addEventListener('click', () => {
+    document.getElementById('container').classList.add("right-panel-active");
+  });
+  document.getElementById('signIn').addEventListener('click', () => {
+    document.getElementById('container').classList.remove("right-panel-active");
+  });
 
-    // Email & Password Sign-Up
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const password2 = document.getElementById('password2').value;
+  // Sign Up
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const password2 = document.getElementById('password2').value;
 
-        if (name.length < 3) {
-            showMessage("Name must be at least three characters!", true);
-            return;
-        }
-        if (password!== password2) {
-            showMessage("Passwords do not match!", true);
-            return;
-        }
+    if (name.length < 3) return showMessage("Name must be at least 3 characters", true);
+    if (password !== password2) return showMessage("Passwords do not match", true);
 
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-                const user = userCredential.user;
-
-                // Create user document with default dashboard data
-                return setDoc(doc(db, "users", user.uid), {
-                    name: name,
-                    email: email,
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString(),
-                    profilePic: "", // Default profile picture
-                    bio: "", // Default bio
-                    isAdmin: false // Default admin status (you can change this)
-                });
-            })
-          .then(() => {
-                showMessage("Account created successfully!");
-                document.getElementById('signupForm').reset();
-                window.location.href = "dashboard.html"; // Redirect to dashboard
-            })
-          .catch(error => {
-                showMessage(error.message, true);
-            });
-    });
-
-    // Email & Password Sign-In
-    document.getElementById('signinForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signin-email').value.trim();
-        const password = document.getElementById('signin-password').value;
-
-        signInWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-                const user = userCredential.user;
-                
-                // Update last login time
-                return updateDoc(doc(db, "users", user.uid), {
-                    lastLogin: new Date().toISOString()
-                });
-            })
-          .then(() => {
-                showMessage("Signed in successfully!");
-                document.getElementById('signinForm').reset();
-                window.location.href = "dashboard.html"; // Redirect to dashboard
-            })
-          .catch(error => {
-                showMessage(error.message, true);
-            });
-    });
-
-    // Facebook Login
-    document.getElementById('facebook-login').addEventListener('click', facebookLogin);
-    document.getElementById('facebook-login-signin').addEventListener('click', facebookLogin);
-
-    function facebookLogin() {
-        const provider = new FacebookAuthProvider();
-        signInWithPopup(auth, provider)
-          .then((result) => {
-                const user = result.user;
-                
-                // Check if this is a new user
-                return getDoc(doc(db, "users", user.uid))
-                  .then((docSnap) => {
-                        if (!docSnap.exists()) {
-                            // New user - save to Firestore with default dashboard data
-                            return setDoc(doc(db, "users", user.uid), {
-                                name: user.displayName || "Facebook User",
-                                email: user.email,
-                                createdAt: new Date().toISOString(),
-                                lastLogin: new Date().toISOString(),
-                                provider: "facebook",
-                                profilePic: "", // Default profile picture
-                                bio: "", // Default bio
-                                isAdmin: false // Default admin status
-                            });
-                        } else {
-                            // Existing user - update last login
-                            return updateDoc(doc(db, "users", user.uid), {
-                                lastLogin: new Date().toISOString()
-                            });
-                        }
-                    });
-            })
-          .then(() => {
-                showMessage('Signed in with Facebook');
-                window.location.href = "dashboard.html"; // Redirect to dashboard
-            })
-          .catch(error => {
-                showMessage(error.message, true);
-            });
-    }
-
-    // Google Login
-    document.getElementById('google-login').addEventListener('click', googleLogin);
-    document.getElementById('google-login-signin').addEventListener('click', googleLogin);
-
-    function googleLogin() {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-          .then((result) => {
-                const user = result.user;
-                
-                // Check if this is a new user
-                return getDoc(doc(db, "users", user.uid))
-                  .then((docSnap) => {
-                        if (!docSnap.exists()) {
-                            // New user - save to Firestore with default dashboard data
-                            return setDoc(doc(db, "users", user.uid), {
-                                name: user.displayName || "Google User",
-                                email: user.email,
-                                createdAt: new Date().toISOString(),
-                                lastLogin: new Date().toISOString(),
-                                provider: "google",
-                                profilePic: "", // Default profile picture
-                                bio: "", // Default bio
-                                isAdmin: false // Default admin status
-                            });
-                        } else {
-                            // Existing user - update last login
-                            return updateDoc(doc(db, "users", user.uid), {
-                                lastLogin: new Date().toISOString()
-                            });
-                        }
-                    });
-            })
-          .then(() => {
-                showMessage('Signed in with Google');
-                window.location.href = "dashboard.html"; // Redirect to dashboard
-            })
-          .catch(error => {
-                showMessage(error.message, true);
-            });
-    }
-
-    // Password Reset
-    document.getElementById('forgot-password').addEventListener('click', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signin-email').value.trim();
-        
-        if (!email) {
-            showMessage("Please enter your email address first", true);
-            return;
-        }
-        
-        sendPasswordResetEmail(auth, email)
-          .then(() => {
-                showMessage("Password reset email sent. Check your inbox.");
-            })
-          .catch((error) => {
-                showMessage(error.message, true);
-            });
-    });
-</script>
-
-<script type="module" src="auth.js">
-
-
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-
-const auth = getAuth();
-
-// Sign-Up Function
-async function signUpUser(email, password) {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("User signed up successfully:", userCredential.user);
-        return userCredential.user;
-    } catch (error) {
-        console.error("Error signing up:", error.message);
-        throw error;
-    }
-}
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-// Sign-In Function
-async function signInUser(email, password) {
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+        profilePic: "",
+        bio: "",
+        isAdmin: false
+      });
+
+      showMessage("Account created successfully!");
+      document.getElementById('signupForm').reset();
+      window.location.href = "index(Products) - AfterLog.html";
+    } catch (error) {
+      showMessage(error.message, true);
+    }
+  });
+
+  // Sign In
+  document.getElementById('signinForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('signin-email').value.trim();
+    const password = document.getElementById('signin-password').value;
+
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log("User signed in successfully:", userCredential.user);
-        return userCredential.user;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateDoc(doc(db, "users", user.uid), {
+        lastLogin: new Date().toISOString()
+      });
+
+      showMessage("Signed in successfully!");
+      document.getElementById('signinForm').reset();
+      window.location.href = "index(Products) - AfterLog.html";
     } catch (error) {
-        console.error("Error signing in:", error.message);
-        throw error;
+      showMessage(error.message, true);
     }
-}
+  });
 
-export { signUpUser, signInUser };
+  // Facebook Login
+  document.getElementById('facebook-login').addEventListener('click', facebookLogin);
+  document.getElementById('facebook-login-signin').addEventListener('click', facebookLogin);
 
+  async function facebookLogin() {
+    const provider = new FacebookAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const docSnap = await getDoc(doc(db, "users", user.uid));
 
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, "users", user.uid), {
+          name: user.displayName || "Facebook User",
+          email: user.email,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          provider: "facebook",
+          profilePic: "",
+          bio: "",
+          isAdmin: false
+        });
+      } else {
+        await updateDoc(doc(db, "users", user.uid), {
+          lastLogin: new Date().toISOString()
+        });
+      }
 
+      showMessage("Signed in with Facebook!");
+      window.location.href = "index(Products) - AfterLog.html";
+    } catch (error) {
+      showMessage(error.message, true);
+    }
+  }
+
+  // Google Login
+  document.getElementById('google-login').addEventListener('click', googleLogin);
+  document.getElementById('google-login-signin').addEventListener('click', googleLogin);
+
+  async function googleLogin() {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const docSnap = await getDoc(doc(db, "users", user.uid));
+
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, "users", user.uid), {
+          name: user.displayName || "Google User",
+          email: user.email,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          provider: "google",
+          profilePic: "",
+          bio: "",
+          isAdmin: false
+        });
+      } else {
+        await updateDoc(doc(db, "users", user.uid), {
+          lastLogin: new Date().toISOString()
+        });
+      }
+
+      showMessage("Signed in with Google!");
+      window.location.href = "index(Products) - AfterLog.html";
+    } catch (error) {
+      showMessage(error.message, true);
+    }
+  }
 </script>
-
-
 </body>
 </html>
