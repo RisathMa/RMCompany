@@ -1,0 +1,89 @@
+/* Nav Bar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+    background-color: #3498db;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+   
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 10px;
+    transform: translateX(135px);
+}
+
+.company-name {
+    font-family: "Cal Sans", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #146752;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-family: "Roboto Slab", serif;
+    color: #000000;
+    font-weight: 500;
+    font-size: 17px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #22c5d4;
+}
+
+.signin-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signin-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Mobile Menu */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
