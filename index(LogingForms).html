@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMCompany Login & Registration</title>
+    <link rel="stylesheet" href="HomeAssest/styleLogForm.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hidden { display: none; }
+        .error { color: red; font-size: 0.875rem; }
+        .google-btn { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <nav class="navbar">
+            <div class="logo-container">
+                <a href="index(Home).html">
+                    <img src="Logo-modified (1).png" alt="Company Logo" class="logo">
+                </a>
+               
+            </div>
+        
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+        
+        <!-- Login Form -->
+        <div id="loginForm" class="form-container">
+            <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+            <div class="mb-4">
+                <label class="block text-gray-700">Email</label>
+                <input type="email" id="loginEmail" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" id="loginPassword" class="w-full p-2 border rounded" required>
+            </div>
+            <p id="loginError" class="error hidden"></p>
+            <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Login</button>
+            <button onclick="signInWithGoogle()" class="w-full bg-red-500 text-white p-2 rounded mt-2 hover:bg-red-600 google-btn">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#fff" d="M12.24 10.667V14.4h3.818c-.152.96-.762 1.765-1.6 2.373l2.6 1.965c1.52-1.405 2.4-3.467 2.4-5.938 0-.56-.048-1.12-.133-1.667H12.24z"/>
+                    <path fill="#4285F4" d="M12 20c2.667 0 4.933-.867 6.586-2.347l-2.6-1.965c-.914.613-2.08.987-3.986.987-3.067 0-5.667-2.067-6.586-4.853H2.76v2.027A11.996 11.996 0 0012 20z"/>
+                    <path fill="#34A853" d="M5.414 14.12A6.77 6.77 0 014.8 12c0-.734.133-1.44.414-2.12V7.853H2.76a11.996 11.996 0 000 8.294h2.654v-2.027z"/>
+                    <path fill="#FBBC05" d="M12 5.333c1.467 0 2.786.493 3.813 1.453l2.854-2.853C16.933 2.373 14.667 1.333 12 1.333c-4.8 0-8.933 2.747-10.933 6.8h2.454v-2.027A6.77 6.77 0 0112 5.333z"/>
+                </svg>
+                Login with Google
+            </button>
+            <p class="text-center mt-4">
+                <a href="#" onclick="showForgotPassword()" class="text-blue-500 hover:underline">Forgot Password?</a>
+            </p>
+            <p class="text-center mt-2">
+                Don't have an account? <a href="#" onclick="showRegister()" class="text-blue-500 hover:underline">Register</a>
+            </p>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registerForm" class="form-container hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+            <div class="mb-4">
+                <label class="block text-gray-700">Full Name</label>
+                <input type="text" id="registerName" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Email</label>
+                <input type="email" id="registerEmail" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" id="registerPassword" class="w-full p-2 border rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="w-full p-2 border rounded" required>
+            </div>
+            <p id="registerError" class="error hidden"></p>
+            <button onclick="register()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Register</button>
+            <button onclick="signInWithGoogle()" class="w-full bg-red-500 text-white p-2 rounded mt-2 hover:bg-red-600 google-btn">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#fff" d="M12.24 10.667V14.4h3.818c-.152.96-.762 1.765-1.6 2.373l2.6 1.965c1.52-1.405 2.4-3.467 2.4-5.938 0-.56-.048-1.12-.133-1.667H12.24z"/>
+                    <path fill="#4285F4" d="M12 20c2.667 0 4.933-.867 6.586-2.347l-2.6-1.965c-.914.613-2.08.987-3.986.987-3.067 0-5.667-2.067-6.586-4.853H2.76v2.027A11.996 11.996 0 0012 20z"/>
+                    <path fill="#34A853" d="M5.414 14.12A6.77 6.77 0 014.8 12c0-.734.133-1.44.414-2.12V7.853H2.76a11.996 11.996 0 000 8.294h2.654v-2.027z"/>
+                    <path fill="#FBBC05" d="M12 5.333c1.467 0 2.786.493 3.813 1.453l2.854-2.853C16.933 2.373 14.667 1.333 12 1.333c-4.8 0-8.933 2.747-10.933 6.8h2.454v-2.027A6.77 6.77 0 0112 5.333z"/>
+                </svg>
+                Register with Google
+            </button>
+            <p class="text-center mt-2">
+                Already have an account? <a href="#" onclick="showLogin()" class="text-blue-500 hover:underline">Login</a>
+            </p>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgotPasswordForm" class="form-container hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center">Forgot Password</h2>
+            <div class="mb-4">
+                <label class="block text-gray-700">Email</label>
+                <input type="email" id="resetEmail" class="w-full p-2 border rounded" required>
+            </div>
+            <p id="resetError" class="error hidden"></p>
+            <button onclick="resetPassword()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Send Reset Email</button>
+            <p class="text-center mt-2">
+                <a href="#" onclick="showLogin()" class="text-blue-500 hover:underline">Back to Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
+            authDomain: "rmcompany-c4705.firebaseapp.com",
+            projectId: "rmcompany-c4705",
+            storageBucket: "rmcompany-c4705.firebasestorage.app",
+            messagingSenderId: "474034947608",
+            appId: "1:474034947608:web:66d6fc74ad73b53cf9656d"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Form toggle functions
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('forgotPasswordForm').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('forgotPasswordForm').classList.add('hidden');
+        }
+
+        function showForgotPassword() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('forgotPasswordForm').classList.remove('hidden');
+        }
+
+        // Login function
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const error = document.getElementById('loginError');
+
+            if (!email || !password) {
+                error.textContent = 'Email and Password are required.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    window.location.href = 'index(Products) - AfterLog.html';
+                })
+                .catch((err) => {
+                    error.textContent = err.message;
+                    error.classList.remove('hidden');
+                });
+        }
+
+        // Register function
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const error = document.getElementById('registerError');
+
+            if (!name || !email || !password || !confirmPassword) {
+                error.textContent = 'All fields are required.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                error.textContent = 'Passwords do not match.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    return db.collection('users').doc(user.uid).set({
+                        fullName: name,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    window.location.href = 'index(Products) - AfterLog.html';
+                })
+                .catch((err) => {
+                    error.textContent = err.message;
+                    error.classList.remove('hidden');
+                });
+        }
+
+        // Google Sign-In
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    db.collection('users').doc(user.uid).set({
+                        fullName: user.displayName,
+                        email: user.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true })
+                    .then(() => {
+                        window.location.href = 'index(Products) - AfterLog.html';
+                    });
+                })
+                .catch((err) => {
+                    document.getElementById('loginError').textContent = err.message;
+                    document.getElementById('loginError').classList.remove('hidden');
+                });
+        }
+
+        // Password Reset
+        function resetPassword() {
+            const email = document.getElementById('resetEmail').value;
+            const error = document.getElementById('resetError');
+
+            if (!email) {
+                error.textContent = 'Email is required.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('Password reset email sent!');
+                    showLogin();
+                })
+                .catch((err) => {
+                    error.textContent = err.message;
+                    error.classList.remove('hidden');
+                });
+        }
+
+        // Redirect if already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user && window.location.pathname.includes('auth.html')) {
+                window.location.href = 'index(Products) - AfterLog.html';
+            }
+        });
+    </script>
+</body>
+</html>
