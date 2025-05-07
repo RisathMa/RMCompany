@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="css/form_style.css" />
   <link rel="stylesheet" href="styleaccount.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script defer src="https://kit.fontawesome.com/a076d05399.js"></script>
-</head>
+  </head>
 <body>
 
 <center>
@@ -23,14 +22,12 @@
 
 <div class="alert" id="msg"></div>
 <div class="container" id="container">
-  <!-- Sign Up Form -->
   <div class="form-container sign-up-container">
     <form id="signupForm">
       <h1>Create Account</h1>
       <div class="social-container">
-       
         <button type="button" id="google-login" class="social"><i class="fab fa-google"></i></button>
-      </div>
+        </div>
       <span>Or Use Your Email For Registration</span>
       <input type="text" placeholder="Name" id="name" required />
       <input type="email" placeholder="Email" id="email" required />
@@ -40,14 +37,12 @@
     </form>
   </div>
 
-  <!-- Sign In Form -->
   <div class="form-container sign-in-container">
     <form id="signinForm">
       <h1>Sign In</h1>
       <div class="social-container">
-       
-        <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
-      </div>
+         <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
+         </div>
       <span>Or Use Your Email Account</span>
       <input type="email" placeholder="Email" id="signin-email" required />
       <input type="password" placeholder="Password" id="signin-password" required />
@@ -56,7 +51,6 @@
     </form>
   </div>
 
-  <!-- Overlay Panel -->
   <div class="overlay-container">
     <div class="overlay">
       <div class="overlay-panel overlay-left">
@@ -81,8 +75,8 @@
     signInWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
-    FacebookAuthProvider,
-    sendPasswordResetEmail
+    // Removed FacebookAuthProvider import
+    sendPasswordResetEmail // Assuming you might implement this later
   } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
   import {
     getFirestore,
@@ -92,19 +86,22 @@
     updateDoc
   } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
+  // Your Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
-    authDomain: "rmcompany-c4705.firebaseapp.com",
-    projectId: "rmcompany-c4705",
-    storageBucket: "rmcompany-c4705.appspot.com",
-    messagingSenderId: "474034947608",
-    appId: "1:474034947608:web:66d6fc74ad73b53cf9656d"
+    apiKey: "YOUR_API_KEY", // Replace with your actual API Key
+    authDomain: "YOUR_AUTH_DOMAIN", // Replace with your actual Auth Domain
+    projectId: "YOUR_PROJECT_ID", // Replace with your actual Project ID
+    storageBucket: "YOUR_STORAGE_BUCKET", // Replace with your actual Storage Bucket
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // Replace with your actual Messaging Sender ID
+    appId: "YOUR_APP_ID" // Replace with your actual App ID
   };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // Function to show messages
   function showMessage(message, isError = false) {
     const msgElement = document.getElementById('msg');
     msgElement.textContent = message;
@@ -118,10 +115,10 @@
 
     setTimeout(() => {
       msgElement.style.display = 'none';
-    }, 3000);
+    }, 3000); // Hide after 3 seconds
   }
 
-  // Toggle Panel
+  // Toggle Panel functionality
   document.getElementById('signUp').addEventListener('click', () => {
     document.getElementById('container').classList.add("right-panel-active");
   });
@@ -129,7 +126,7 @@
     document.getElementById('container').classList.remove("right-panel-active");
   });
 
-  // Sign Up
+  // Email/Password Sign Up
   document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
@@ -137,18 +134,24 @@
     const password = document.getElementById('password').value;
     const password2 = document.getElementById('password2').value;
 
-    if (name.length < 3) return showMessage("Name must be at least 3 characters", true);
-    if (password !== password2) return showMessage("Passwords do not match", true);
+    if (name.length < 3) {
+      return showMessage("Name must be at least 3 characters", true);
+    }
+    if (password !== password2) {
+      return showMessage("Passwords do not match", true);
+    }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Store user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
-        name,
-        email,
+        name: name,
+        email: user.email,
         createdAt: new Date().toISOString(),
         lastLogin: new Date().toISOString(),
+        provider: "emailpassword", // Add provider info
         profilePic: "",
         bio: "",
         isAdmin: false
@@ -156,13 +159,14 @@
 
       showMessage("Account created successfully!");
       document.getElementById('signupForm').reset();
+      // Redirect to the products page
       window.location.href = "index(Products) - AfterLog.html";
     } catch (error) {
       showMessage(error.message, true);
     }
   });
 
-  // Sign In
+  // Email/Password Sign In
   document.getElementById('signinForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('signin-email').value.trim();
@@ -172,87 +176,73 @@
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Update last login time
       await updateDoc(doc(db, "users", user.uid), {
         lastLogin: new Date().toISOString()
       });
 
       showMessage("Signed in successfully!");
       document.getElementById('signinForm').reset();
+      // Redirect to the products page
       window.location.href = "index(Products) - AfterLog.html";
     } catch (error) {
       showMessage(error.message, true);
     }
   });
 
-  // Facebook Login
-  document.getElementById('facebook-login').addEventListener('click', facebookLogin);
-  document.getElementById('facebook-login-signin').addEventListener('click', facebookLogin);
+  // --- Social Login Function ---
 
-  async function facebookLogin() {
-    const provider = new FacebookAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      const docSnap = await getDoc(doc(db, "users", user.uid));
-
-      if (!docSnap.exists()) {
-        await setDoc(doc(db, "users", user.uid), {
-          name: user.displayName || "Facebook User",
-          email: user.email,
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          provider: "facebook",
-          profilePic: "",
-          bio: "",
-          isAdmin: false
-        });
-      } else {
-        await updateDoc(doc(db, "users", user.uid), {
-          lastLogin: new Date().toISOString()
-        });
-      }
-
-      showMessage("Signed in with Facebook!");
-      window.location.href = "index(Products) - AfterLog.html";
-    } catch (error) {
-      showMessage(error.message, true);
-    }
-  }
-
-  // Google Login
-  document.getElementById('google-login').addEventListener('click', googleLogin);
-  document.getElementById('google-login-signin').addEventListener('click', googleLogin);
-
+  // Google Login function
   async function googleLogin() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+
+      // Check if user document exists in Firestore
       const docSnap = await getDoc(doc(db, "users", user.uid));
 
       if (!docSnap.exists()) {
+        // If user is new, create a document
         await setDoc(doc(db, "users", user.uid), {
           name: user.displayName || "Google User",
           email: user.email,
           createdAt: new Date().toISOString(),
           lastLogin: new Date().toISOString(),
-          provider: "google",
-          profilePic: "",
+          provider: "google", // Add provider info
+          profilePic: user.photoURL || "", // Use Google profile pic if available
           bio: "",
           isAdmin: false
         });
       } else {
+        // If user exists, update last login
         await updateDoc(doc(db, "users", user.uid), {
           lastLogin: new Date().toISOString()
         });
       }
 
       showMessage("Signed in with Google!");
+      // Redirect to the products page
       window.location.href = "index(Products) - AfterLog.html";
     } catch (error) {
+      // Handle errors (e.g., popup closed, auth failed)
       showMessage(error.message, true);
+      console.error("Google login error:", error); // Log error for debugging
     }
   }
+
+  // Add event listeners to social login buttons
+  document.getElementById('google-login').addEventListener('click', googleLogin);
+  document.getElementById('google-login-signin').addEventListener('click', googleLogin);
+  // Removed Facebook event listeners
+
+  // Optional: Forgot Password functionality (needs implementation)
+  document.getElementById('forgot-password').addEventListener('click', (e) => {
+      e.preventDefault();
+      // Implement forgot password logic here, likely using sendPasswordResetEmail
+      showMessage("Forgot password functionality not implemented yet.", false); // Or prompt for email
+  });
+
 </script>
 </body>
 </html>
