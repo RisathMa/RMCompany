@@ -6,50 +6,29 @@
     <title>RM Solutions - Product Showcase</title>
     <link rel="stylesheet" href="HomeAssest/styleProductShowCase.css">
 
-    <!-- NavBar Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-    <!-- NavBar Font Close-->
-    
-    <!--Logo Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
-    <!-- Logo Font Close -->
-   
-    <!-- Hero section Title -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
-    <!-- Hero close -->
-
-    <!-- Hero Section Paraghap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet">
-    <!-- Hero Section Paragahp Close -->
-
-    <!-- Product ShowCse Title -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-     <!-- Product ShowCse Title Close -->
-
-     <!-- Product Show Case Paraghp -->
      <link rel="preconnect" href="https://fonts.googleapis.com">
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-     <!-- Close -->
-
-     <!-- Footer -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <!-- Footer Close -->
-</head>
+    </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo-container">
             <img src="Logo-modified (1).png" alt="Company Logo" class="logo">
@@ -68,13 +47,11 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>Discover Our Premium Products</h1>
         <p>Browse through our extensive collection of high-quality products designed to meet your specific needs and requirements.</p>
     </section>
 
-    <!-- Products Showcase -->
     <section class="products-showcase">
         <div class="products-heading">
             <h2>Featured Products</h2>
@@ -82,12 +59,11 @@
         </div>
 
         <div class="product-categories">
-            <button class="category-btn active" data-category="all">All Products</button>
-            
+            <button class="category-btn active" data-category="all" id="allProductsNavBtn">To Home</button>
+
         </div>
 
         <div class="products-grid">
-            <!-- Product Card 1 -->
             <div class="product-card" data-category="video">
                 <div class="product-image">
                     <img src="Service-TitleBG/FaceBlur.png" alt="RM Analytics Suite">
@@ -99,7 +75,6 @@
                 </div>
             </div>
 
-            <!-- Product Card 2 -->
             <div class="product-card" data-category="photo">
                 <div class="product-image">
                     <img src="Service-TitleBG/Background.png" alt="RM Server Pro">
@@ -111,26 +86,23 @@
                 </div>
             </div>
 
-           
 
-            
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-col">
                 <h3>About RM Solutions</h3>
                 <p>RM Solutions provides innovative technology solutions to help businesses and individuals navigate the digital landscape securely and efficiently.</p>
-                
+
             </div>
             <div class="footer-col">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="#home">Home</a></li>
+                    <li><a href="index(Home) - AfterLog.html">Home</a></li>
                     <li><a href="#services">Services</a></li>
-                    <li><a href="#products">Products</a></li>
+                    <li><a href="index(Products) - AfterLog.html">Products</a></li>
                     <li><a href="#about">About Us</a></li>
                 </ul>
             </div>
@@ -161,9 +133,15 @@
 
     <script>
         // Mobile Menu Toggle
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
+        // Note: There is no element with class 'mobile-menu-btn' in the provided HTML.
+        // This code will not execute unless you add a button with this class.
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        if (mobileMenuBtn) {
+             mobileMenuBtn.addEventListener('click', function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+            });
+        }
+
 
         // Product Category Filter
         const categoryButtons = document.querySelectorAll('.category-btn');
@@ -173,13 +151,13 @@
             button.addEventListener('click', function() {
                 // Remove active class from all buttons
                 categoryButtons.forEach(btn => btn.classList.remove('active'));
-                
+
                 // Add active class to clicked button
                 this.classList.add('active');
-                
+
                 // Get selected category
                 const selectedCategory = this.dataset.category;
-                
+
                 // Filter products
                 productCards.forEach(card => {
                     if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
@@ -194,11 +172,11 @@
         // Simple product search functionality
         function searchProducts(query) {
             const lowerQuery = query.toLowerCase();
-            
+
             productCards.forEach(card => {
                 const title = card.querySelector('.product-title').textContent.toLowerCase();
                 const description = card.querySelector('.product-description').textContent.toLowerCase();
-                
+
                 if (title.includes(lowerQuery) || description.includes(lowerQuery)) {
                     card.style.display = 'block';
                 } else {
@@ -211,20 +189,43 @@
         // Uncomment this code and add a search input element with id="search-input"
         /*
         const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('input', function() {
-            searchProducts(this.value);
-        });
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                searchProducts(this.value);
+            });
+        }
         */
+
+        // --- JavaScript for "All Products" button navigation ---
+        // Get the "All Products" button using its ID
+        const allProductsNavButton = document.getElementById('allProductsNavBtn');
+
+        // Check if the button exists before adding the event listener
+        if (allProductsNavButton) {
+            // Add a click event listener
+            allProductsNavButton.addEventListener('click', function() {
+                // Navigate to index.html when the button is clicked
+                window.location.href = 'index(Products) - AfterLog.html';
+            });
+        } else {
+            // Log an error if the button was not found (helpful for debugging)
+            console.error('Button with ID "allProductsNavBtn" not found.');
+        }
+        // --- End of JavaScript for navigation ---
+
     </script>
 
-<script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
-        return false;
-      }
-    };
-  </script>
-    
+    <script>
+        // Prevent right-click context menu
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disable F12 and Ctrl+Shift+I
+        document.onkeydown = function(e) {
+            if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+                return false;
+            }
+        };
+    </script>
+
 </body>
 </html>
