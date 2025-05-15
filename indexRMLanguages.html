@@ -330,5 +330,34 @@
         .catch(() => alert('Failed to copy.'));
     });
   </script>
+
+    <script>
+  document.onkeydown = function (e) {
+    if (
+      e.key === "F12" || 
+      (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      return false;
+    }
+  };
+</script>
+
+<script>
+  let devtools = { open: false };
+  const element = new Image();
+  Object.defineProperty(element, 'id', {
+    get: function () {
+      devtools.open = true;
+      alert("DevTools is open. Site functionality may be limited.");
+    }
+  });
+  console.log('%c', element);
+</script>
+
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+</script>
+    
 </body>
 </html>
