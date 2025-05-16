@@ -148,6 +148,7 @@
     </section>
 
     <!-- Products Section -->
+    <!-- Products Section -->
     <section id="products" class="products">
         <h2 class="section-title">Our Products</h2>
         <p class="section-subtitle">Discover our innovative products designed to solve real-world problems.</p>
@@ -155,25 +156,25 @@
             <div class="product-card">
                 <div class="product-img" id="faceBlur">
                     <div class="demo-face"></div>
-                    <div class="blur-effect">Face Blurred</div>
+                    <div class="blur-effect">FaceBlur In Video</div>
                 </div>
                 <div class="product-info">
-                    <center><h3>FaceBlur In Video</h3>
+                    <center><h3>RMFaceblur</h3>
                     <p>Gain valuable insights from your data with our AI-powered analytics platform. Make informed decisions and drive your business forward.</p>
-                    <a href="index(Products) - AfterLog.html" class="product-btn">Learn More</a></center>
+                    <a href="index(Products) - AfterLog.html" class="product-btn">Click Me</a></center>
                 </div>
             </div>
 
 
             <div class="product-card">
                 <div class="product-img" id="faceBlur">
-                    <div class="demo-face"></div>
-                    <div class="blur-effect">Background Remove</div>
+                <img src="Service-TitleBG/HomeLanuageTran.jpg" alt="Background Remove Image" style="width:80%; height:auto;">                    
+                <div class="blur-effect">Languages Translator</div>
                 </div>
                 <div class="product-info">
-                    <center><h3>Background Remove In Photo</h3>
-                    <p>Gain valuable insights from your data with our AI-powered analytics platform. Make informed decisions and drive your business forward.</p>
-                    <a href="index(Products) - AfterLog.html" class="product-btn">Learn More</a></center>
+                    <center><h3>RMLanguages Translator</h3>
+                    <p>Gain valuable To Your Life From our AI-powered Languages Translator. Make Your Day Bright.</p>
+                    <a href="index(Products) - AfterLog.html" class="product-btn">Click Me</a></center>
                 </div>
             </div>
         </div>
@@ -238,6 +239,11 @@
         <div class="gallery-container">
             <div class="gallery-item" data-id="1">
                 <img src="Service-TitleBG/Gallery1.png" alt="Gallery Image 1" />
+                <div class="gallery-overlay">Click to View</div>
+            </div>
+
+            <div class="gallery-item" data-id="2">
+                <img src="Service-TitleBG/Gallery2.png" alt="Gallery Image 2" />
                 <div class="gallery-overlay">Click to View</div>
             </div>
             
@@ -609,11 +615,38 @@
         });
     </script>
     
-     <script>
+
+    <script>
+    // Disable Right Click
     document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+C
+    document.onkeydown = function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
         return false;
       }
     };
-  </script>              
+
+    // Detect if DevTools is open
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+      get: function () {
+        alert("DevTools is open. Site functionality may be limited.");
+      }
+    });
+    console.log('%c', element);
+  </script>
+    <script>
+    // Obfuscated HTML content
+    document.write(String.fromCharCode(
+      60, 104, 49, 62, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 60, 47, 104, 49, 62
+    ));
+  </script>
+
+  </head>
+<body>
+  
