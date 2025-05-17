@@ -87,7 +87,8 @@
         </div>
 
         <div class="products-grid">
-            <!-- Product Card 1 -->
+
+             <!-- Product Card 1 -->
             <div class="product-card" data-category="video">
                 <div class="product-image">
                     <img src="Service-TitleBG/FaceBlur.png" alt="RM Analytics Suite">
@@ -107,11 +108,21 @@
                 <div class="product-details">
                     <center><h3 class="product-title">RMLanguages Translator</h3>
                     <p class="product-description">Translate Anything</p>
-                    <a href="indexRMLanguages.html" class="product-btn">View Details</a></center>
+                    <a href="indexRMLanguages.html" class="product-btn">Use This</a></center>
                 </div>
             </div>
 
-           
+            <!-- Product Card 3 -->
+            <div class="product-card" data-category="photo">
+                <div class="product-image">
+                    <img src="Service-TitleBG/Product Spech.jpg" alt="RM Server Pro">
+                </div>
+                <div class="product-details">
+                    <center><h3 class="product-title">RMSpeech To Text</h3>
+                    <p class="product-description">Translate Anything</p>
+                    <a href="indexRMVoiceToSpeech.html" class="product-btn">Use This</a></center>
+                </div>
+            </div>
 
             
         </div>
@@ -216,5 +227,37 @@
         });
         */
     </script>
+
+<script>
+    // Disable Right Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+C
+    document.onkeydown = function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        return false;
+      }
+    };
+
+    // Detect if DevTools is open
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+      get: function () {
+        alert("DevTools is open. Site functionality may be limited.");
+      }
+    });
+    console.log('%c', element);
+  </script>
+    <script>
+    // Obfuscated HTML content
+    document.write(String.fromCharCode(
+      60, 104, 49, 62, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 60, 47, 104, 49, 62
+    ));
+  </script>
+
 </body>
 </html>
