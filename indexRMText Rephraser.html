@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMText Rephraser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ancizar+Serif:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Serif:ital,wght@0,300..900;1,300..900&display=swap');
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+</style>
+
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6f94c6;
+            --light-color: #f5f8ff;
+            --dark-color: #2c3e50;
+            --success-color: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+      .browse-btn1 {
+    display: inline-block;
+    background-color: rgb(42, 61, 67);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px; /* Changed to 330px */
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transform: translateY(30px)
+}
+
+.browse-btn1:hover {
+    background-color: rgb(0, 0, 0);
+}  
+        .container {
+           max-width: 1000px;
+            max-height: 700px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+           font-family: "Ancizar Serif", serif;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        
+        p.description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        textarea {
+            font-family: "Oswald", sans-serif;
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .output-container {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .output-container h2 {
+            font-family: "Oswald", sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        #output-text {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-color);
+            font-size: 1rem;
+            min-height: 100px;
+        }
+        
+        .copy-btn {
+            margin-top: 10px;
+            background-color: var(--secondary-color);
+            width: auto;
+            padding: 8px 15px;
+            float: right;
+            font-size: 0.9rem;
+        }
+        
+        .copy-success {
+            background-color: var(--success-color);
+        }
+        
+        .style-description {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <center>
+<a href="https://companyrm.lk/index(Products)%20-%20AfterLog.html" class="browse-btn1">Home</a>
+  </center>
+<Br>
+    <div class="container">
+        <h1>RMText Rephraser</h1>
+        <p class="description">Paste your text and select a style to rephrase it</p>
+        
+        <div class="form-group">
+            <label for="input-text">Input Text</label>
+            <textarea id="input-text" placeholder="Paste your text here..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="style-select">Rephrase Style</label>
+            <select id="style-select">
+                <option value="simple">Simple</option>
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
+            </select>
+            <div id="style-description" class="style-description">Makes text easier to understand with simpler words and shorter sentences.</div>
+        </div>
+        
+        <button id="rephrase-btn">Rephrase</button>
+        
+        <div class="output-container">
+            <h2>Rephrased Text</h2>
+            <div id="output-text">Your rephrased text will appear here...</div>
+            <button id="copy-btn" class="copy-btn">Copy to clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Style descriptions
+        const styleDescriptions = {
+            'simple': 'Makes text easier to understand with simpler words and shorter sentences.',
+            'formal': 'Enhances text with professional vocabulary and structured sentences for academic or business contexts.',
+            'casual': 'Transforms text into a conversational, friendly tone with relaxed language.'
+        };
+
+        // Synonym dictionaries for different styles
+        const synonymDictionaries = {
+            simple: {
+                'utilize': 'use',
+                'implement': 'use',
+                'acquire': 'get',
+                'purchase': 'buy',
+                'sufficient': 'enough',
+                'require': 'need',
+                'additional': 'more',
+                'numerous': 'many',
+                'obtain': 'get',
+                'comprehend': 'understand',
+                'demonstrate': 'show',
+                'initiate': 'start',
+                'terminate': 'end',
+                'prioritize': 'focus on',
+                'facilitate': 'help',
+                'modification': 'change',
+                'approximately': 'about',
+                'fundamental': 'basic',
+                'consequently': 'so',
+                'subsequently': 'then',
+                'nevertheless': 'still',
+                'furthermore': 'also',
+                'therefore': 'so',
+                'however': 'but',
+                'despite': 'even though',
+                'regarding': 'about',
+                'assistance': 'help',
+                'attempt': 'try',
+                'currently': 'now',
+                'frequently': 'often',
+                'initially': 'first',
+                'previously': 'before',
+                'utilize': 'use',
+                'visualize': 'see',
+                'finalize': 'finish',
+                'communicate': 'talk',
+                'sufficient': 'enough',
+                'opportunity': 'chance',
+                'inquire': 'ask',
+                'advantageous': 'helpful',
+                'commence': 'start',
+                'substantial': 'big',
+                'emphasize': 'stress',
+                'encounter': 'meet',
+                'indicate': 'show',
+                'verify': 'check'
+            },
+            formal: {
+                'use': 'utilize',
+                'get': 'acquire',
+                'buy': 'purchase',
+                'enough': 'sufficient',
+                'need': 'require',
+                'more': 'additional',
+                'many': 'numerous',
+                'understand': 'comprehend',
+                'show': 'demonstrate',
+                'start': 'initiate',
+                'end': 'terminate',
+                'help': 'facilitate',
+                'change': 'modification',
+                'about': 'approximately',
+                'basic': 'fundamental',
+                'so': 'consequently',
+                'then': 'subsequently',
+                'still': 'nevertheless',
+                'also': 'furthermore',
+                'but': 'however',
+                'even though': 'despite',
+                'help': 'assistance',
+                'try': 'attempt',
+                'now': 'currently',
+                'often': 'frequently',
+                'first': 'initially',
+                'before': 'previously',
+                'see': 'visualize',
+                'finish': 'finalize',
+                'talk': 'communicate',
+                'chance': 'opportunity',
+                'ask': 'inquire',
+                'helpful': 'advantageous',
+                'big': 'substantial',
+                'stress': 'emphasize',
+                'meet': 'encounter',
+                'show': 'indicate',
+                'check': 'verify',
+                'keep': 'maintain',
+                'make': 'produce',
+                'think': 'consider',
+                'find out': 'ascertain',
+                'give': 'provide'
+            },
+            casual: {
+                'utilize': 'use',
+                'implement': 'put in place',
+                'acquire': 'grab',
+                'purchase': 'pick up',
+                'sufficient': 'plenty',
+                'require': 'need',
+                'additional': 'extra',
+                'numerous': 'tons of',
+                'obtain': 'get',
+                'comprehend': 'get it',
+                'demonstrate': 'show',
+                'initiate': 'kick off',
+                'terminate': 'wrap up',
+                'prioritize': 'zero in on',
+                'facilitate': 'make easier',
+                'modification': 'tweak',
+                'approximately': 'around',
+                'fundamental': 'basic',
+                'consequently': 'so',
+                'subsequently': 'after that',
+                'nevertheless': 'anyway',
+                'furthermore': 'plus',
+                'therefore': 'that's why',
+                'however': 'but',
+                'despite': 'even though',
+                'regarding': 'about',
+                'assistance': 'help',
+                'attempt': 'take a shot at',
+                'currently': 'right now',
+                'frequently': 'a lot',
+                'initially': 'at first',
+                'previously': 'before',
+                'visualize': 'picture',
+                'finalize': 'wrap up',
+                'communicate': 'chat',
+                'sufficient': 'enough',
+                'opportunity': 'shot',
+                'inquire': 'ask',
+                'advantageous': 'helpful',
+                'commence': 'get going',
+                'substantial': 'major',
+                'emphasize': 'point out',
+                'encounter': 'run into',
+                'indicate': 'show',
+                'verify': 'double-check',
+                'maintain': 'keep up',
+                'provide': 'give',
+                'consider': 'think about',
+                'ascertain': 'figure out'
+            }
+        };
+
+        // Style-specific transformations
+        const transformations = {
+            simple: (text) => {
+                // Replace complex words with simpler synonyms
+                let result = replaceWordsFromDictionary(text, synonymDictionaries.simple);
+                
+                // Break long sentences
+                result = breakLongSentences(result);
+                
+                // Remove jargon and overly technical terms (simplified approach)
+                result = removeJargon(result);
+                
+                return result;
+            },
+            
+            formal: (text) => {
+                // Replace casual words with formal synonyms
+                let result = replaceWordsFromDictionary(text, synonymDictionaries.formal);
+                
+                // Add more complex sentence structures (basic implementation)
+                result = formalizeSentences(result);
+                
+                // Remove contractions
+                result = expandContractions(result);
+                
+                return result;
+            },
+            
+            casual: (text) => {
+                // Replace formal words with casual synonyms
+                let result = replaceWordsFromDictionary(text, synonymDictionaries.casual);
+                
+                // Add contractions
+                result = addContractions(result);
+                
+                // Make sentences more conversational
+                result = casualizeSentences(result);
+                
+                return result;
+            }
+        };
+
+        // Helper functions
+        function replaceWordsFromDictionary(text, dictionary) {
+            let result = text;
+            
+            // Case-insensitive word replacement with boundary checking
+            Object.keys(dictionary).forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                result = result.replace(regex, match => {
+                    // Preserve original capitalization
+                    if (match[0] === match[0].toUpperCase()) {
+                        return dictionary[word.toLowerCase()][0].toUpperCase() + dictionary[word.toLowerCase()].slice(1);
+                    }
+                    return dictionary[word.toLowerCase()];
+                });
+            });
+            
+            return result;
+        }
+
+        function breakLongSentences(text) {
+            // Split text into sentences
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+            
+            let result = [];
+            sentences.forEach(sentence => {
+                // If sentence is long (>20 words), try to break it
+                const words = sentence.trim().split(/\s+/);
+                if (words.length > 20) {
+                    // Find a good breaking point (comma, semicolon, etc.)
+                    const midPoint = Math.floor(words.length / 2);
+                    let breakPoint = midPoint;
+                    
+                    // Look for punctuation near the middle to break at
+                    for (let i = midPoint; i < words.length; i++) {
+                        if (words[i].endsWith(',') || words[i].endsWith(';')) {
+                            breakPoint = i + 1;
+                            break;
+                        }
+                    }
+                    
+                    // Create two sentences
+                    const firstHalf = words.slice(0, breakPoint).join(' ');
+                    const secondHalf = words.slice(breakPoint).join(' ');
+                    
+                    // Capitalize the first letter of the second sentence
+                    const secondSentence = secondHalf.charAt(0).toUpperCase() + secondHalf.slice(1);
+                    
+                    result.push(firstHalf);
+                    result.push(secondSentence);
+                } else {
+                    result.push(sentence);
+                }
+            });
+            
+            return result.join(' ');
+        }
+
+        function removeJargon(text) {
+            // This is a simplified approach. A real implementation would need a jargon dictionary.
+            const jargonPatterns = [
+                /\b[a-z]+-?[a-z]*(ization|ism|ology|ification)\b/gi,
+                /\b[a-z]+-?[a-z]*(centric|oriented|based|driven)\b/gi
+            ];
+            
+            let result = text;
+            jargonPatterns.forEach(pattern => {
+                result = result.replace(pattern, match => {
+                    // Simple replacement strategy - just use "this" or "that" as placeholder
+                    // A real implementation would be more sophisticated
+                    return 'this';
+                });
+            });
+            
+            return result;
+        }
+
+        function formalizeSentences(text) {
+            // Replace casual phrase starts with more formal ones
+            const casualStarts = {
+                /\bBut\b/g: 'However',
+                /\bSo\b/g: 'Therefore',
+                /\bAlso\b/g: 'Additionally',
+                /\bAnd\b/g: 'Furthermore',
+                /\bI think\b/gi: 'It is my assessment that',
+                /\bI believe\b/gi: 'It is my conviction that',
+                /\bIn my opinion\b/gi: 'From my perspective'
+            };
+            
+            let result = text;
+            
+            // Replace casual starts
+            Object.keys(casualStarts).forEach(pattern => {
+                result = result.replace(new RegExp(pattern), casualStarts[pattern]);
+            });
+            
+            return result;
+        }
+
+        function expandContractions(text) {
+            const contractions = {
+                /\bdon't\b/gi: 'do not',
+                /\bcan't\b/gi: 'cannot',
+                /\bwon't\b/gi: 'will not',
+                /\bshouldn't\b/gi: 'should not',
+                /\bcouldn't\b/gi: 'could not',
+                /\bwouldn't\b/gi: 'would not',
+                /\bhadn't\b/gi: 'had not',
+                /\bhasn't\b/gi: 'has not',
+                /\bhaven't\b/gi: 'have not',
+                /\bisn't\b/gi: 'is not',
+                /\baren't\b/gi: 'are not',
+                /\bwasn't\b/gi: 'was not',
+                /\bweren't\b/gi: 'were not',
+                /\bi'm\b/gi: 'I am',
+                /\byou're\b/gi: 'you are',
+                /\bhe's\b/gi: 'he is',
+                /\bshe's\b/gi: 'she is',
+                /\bit's\b/gi: 'it is',
+                /\bwe're\b/gi: 'we are',
+                /\bthey're\b/gi: 'they are',
+                /\bthat's\b/gi: 'that is',
+                /\bwhat's\b/gi: 'what is',
+                /\bwhere's\b/gi: 'where is',
+                /\bwhen's\b/gi: 'when is',
+                /\bhow's\b/gi: 'how is',
+                /\bwho's\b/gi: 'who is',
+                /\bi'll\b/gi: 'I will',
+                /\byou'll\b/gi: 'you will',
+                /\bhe'll\b/gi: 'he will',
+                /\bshe'll\b/gi: 'she will',
+                /\bit'll\b/gi: 'it will',
+                /\bwe'll\b/gi: 'we will',
+                /\bthey'll\b/gi: 'they will',
+                /\bi'd\b/gi: 'I would',
+                /\byou'd\b/gi: 'you would',
+                /\bhe'd\b/gi: 'he would',
+                /\bshe'd\b/gi: 'she would',
+                /\bit'd\b/gi: 'it would',
+                /\bwe'd\b/gi: 'we would',
+                /\bthey'd\b/gi: 'they would',
+                /\bi've\b/gi: 'I have',
+                /\byou've\b/gi: 'you have',
+                /\bwe've\b/gi: 'we have',
+                /\bthey've\b/gi: 'they have',
+                /\blet's\b/gi: 'let us'
+            };
+            
+            let result = text;
+            
+            Object.keys(contractions).forEach(pattern => {
+                result = result.replace(new RegExp(pattern), contractions[pattern]);
+            });
+            
+            return result;
+        }
+
+        function addContractions(text) {
+            const expansions = {
+                /\bdo not\b/gi: 'don\'t',
+                /\bcannot\b/gi: 'can\'t',
+                /\bwill not\b/gi: 'won\'t',
+                /\bshould not\b/gi: 'shouldn\'t',
+                /\bcould not\b/gi: 'couldn\'t',
+                /\bwould not\b/gi: 'wouldn\'t',
+                /\bhad not\b/gi: 'hadn\'t',
+                /\bhas not\b/gi: 'hasn\'t',
+                /\bhave not\b/gi: 'haven\'t',
+                /\bis not\b/gi: 'isn\'t',
+                /\bare not\b/gi: 'aren\'t',
+                /\bwas not\b/gi: 'wasn\'t',
+                /\bwere not\b/gi: 'weren\'t',
+                /\bI am\b/g: 'I\'m',
+                /\byou are\b/gi: 'you\'re',
+                /\bhe is\b/gi: 'he\'s',
+                /\bshe is\b/gi: 'she\'s',
+                /\bit is\b/gi: 'it\'s',
+                /\bwe are\b/gi: 'we\'re',
+                /\bthey are\b/gi: 'they\'re',
+                /\bthat is\b/gi: 'that\'s',
+                /\bwhat is\b/gi: 'what\'s',
+                /\bwhere is\b/gi: 'where\'s',
+                /\bwhen is\b/gi: 'when\'s',
+                /\bhow is\b/gi: 'how\'s',
+                /\bwho is\b/gi: 'who\'s',
+                /\bI will\b/g: 'I\'ll',
+                /\byou will\b/gi: 'you\'ll',
+                /\bhe will\b/gi: 'he\'ll',
+                /\bshe will\b/gi: 'she\'ll',
+                /\bit will\b/gi: 'it\'ll',
+                /\bwe will\b/gi: 'we\'ll',
+                /\bthey will\b/gi: 'they\'ll',
+                /\bI would\b/g: 'I\'d',
+                /\byou would\b/gi: 'you\'d',
+                /\bhe would\b/gi: 'he\'d',
+                /\bshe would\b/gi: 'she\'d',
+                /\bit would\b/gi: 'it\'d',
+                /\bwe would\b/gi: 'we\'d',
+                /\bthey would\b/gi: 'they\'d',
+                /\bI have\b/g: 'I\'ve',
+                /\byou have\b/gi: 'you\'ve',
+                /\bwe have\b/gi: 'we\'ve',
+                /\bthey have\b/gi: 'they\'ve',
+                /\blet us\b/gi: 'let\'s'
+            };
+            
+            let result = text;
+            
+            Object.keys(expansions).forEach(pattern => {
+                result = result.replace(new RegExp(pattern), expansions[pattern]);
+            });
+            
+            return result;
+        }
+
+        function casualizeSentences(text) {
+            // Add casual interjections and phrases
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+            
+            let result = [];
+            sentences.forEach((sentence, index) => {
+                // Don't modify every sentence, just some of them
+                if (index % 3 === 0) {
+                    // Add casual starter for some sentences
+                    const casualStarters = ['Well, ', 'You know, ', 'Look, ', 'Honestly, ', 'Basically, ', 'Actually, ', 'So, ', 'I mean, '];
+                    const randomStarter = casualStarters[Math.floor(Math.random() * casualStarters.length)];
+                    
+                    // Start with lowercase after the casual starter
+                    const modifiedSentence = randomStarter + sentence.trim().charAt(0).toLowerCase() + sentence.trim().slice(1);
+                    result.push(modifiedSentence);
+                } else if (index % 5 === 0) {
+                    // Add casual ending for some sentences
+                    const casualEndings = [', right?', ', you know?', ', for sure.', ', honestly.'];
+                    const randomEnding = casualEndings[Math.floor(Math.random() * casualEndings.length)];
+                    
+                    // Replace the ending punctuation with the casual ending
+                    const modifiedSentence = sentence.trim().replace(/[.!?]$/, '') + randomEnding;
+                    result.push(modifiedSentence);
+                } else {
+                    result.push(sentence);
+                }
+            });
+            
+            return result.join(' ');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update style description when style changes
+            document.getElementById('style-select').addEventListener('change', function() {
+                const selectedStyle = this.value;
+                document.getElementById('style-description').textContent = styleDescriptions[selectedStyle];
+            });
+            
+            // Rephrase button click handler
+            document.getElementById('rephrase-btn').addEventListener('click', function() {
+                const inputText = document.getElementById('input-text').value;
+                const selectedStyle = document.getElementById('style-select').value;
+                
+                if (inputText.trim() === '') {
+                    alert('Please enter some text to rephrase.');
+                    return;
+                }
+                
+                // Apply the selected transformation
+                const rephrasedText = transformations[selectedStyle](inputText);
+                
+                // Update output
+                document.getElementById('output-text').textContent = rephrasedText;
+            });
+            
+            // Copy button click handler
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                const outputText = document.getElementById('output-text').textContent;
+                
+                if (outputText === 'Your rephrased text will appear here...') {
+                    return;
+                }
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(outputText).then(() => {
+                    // Visual feedback
+                    this.textContent = 'Copied!';
+                    this.classList.add('copy-success');
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        this.textContent = 'Copy to clipboard';
+                        this.classList.remove('copy-success');
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+
+
+
+<!-- Endcription -->
+
+ <script>
+    // Disable Right Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+C
+    document.onkeydown = function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        return false;
+      }
+    };
+
+    // Detect if DevTools is open
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+      get: function () {
+        alert("DevTools is open. Site functionality may be limited.");
+      }
+    });
+    console.log('%c', element);
+  </script>
+    
+
+
+
+</body>
+</html>
