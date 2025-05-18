@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RMCompany LogIn</title>
+  <title>RMCompany SignIN</title>
   <link rel="shortcut icon" href="Logo2.png" type="image/x-icon" />
   <link rel="stylesheet" href="css/bootstrap.css" />
   <link rel="stylesheet" href="css/form_style.css" />
   <link rel="stylesheet" href="styleaccount.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  </head>
+</head>
 <body>
 
 <center>
@@ -27,7 +27,7 @@
       <h1>Create Account</h1>
       <div class="social-container">
         <button type="button" id="google-login" class="social"><i class="fab fa-google"></i></button>
-        </div>
+      </div>
       <span>Or Use Your Email For Registration</span>
       <input type="text" placeholder="Name" id="name" required />
       <input type="email" placeholder="Email" id="email" required />
@@ -41,8 +41,8 @@
     <form id="signinForm">
       <h1>Sign In</h1>
       <div class="social-container">
-         <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
-         </div>
+        <button type="button" id="google-login-signin" class="social"><i class="fab fa-google"></i></button>
+      </div>
       <span>Or Use Your Email Account</span>
       <input type="email" placeholder="Email" id="signin-email" required />
       <input type="password" placeholder="Password" id="signin-password" required />
@@ -75,8 +75,7 @@
     signInWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
-    // Removed FacebookAuthProvider import
-    sendPasswordResetEmail // Assuming you might implement this later
+    sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
   import {
     getFirestore,
@@ -88,7 +87,7 @@
 
   // Your Firebase configuration
   const firebaseConfig = {
-     apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
+    apiKey: "AIzaSyAg7OXa5ALUak2G55tlaiO4g0mBvc9m2d4",
     authDomain: "rmcompany-c4705.firebaseapp.com",
     projectId: "rmcompany-c4705",
     storageBucket: "rmcompany-c4705.appspot.com",
@@ -134,6 +133,11 @@
     const password = document.getElementById('password').value;
     const password2 = document.getElementById('password2').value;
 
+    // Validate email for @gmail.com
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      return showMessage("Please use a Gmail address (@gmail.com)", true);
+    }
+
     if (name.length < 3) {
       return showMessage("Name must be at least 3 characters", true);
     }
@@ -151,7 +155,7 @@
         email: user.email,
         createdAt: new Date().toISOString(),
         lastLogin: new Date().toISOString(),
-        provider: "emailpassword", // Add provider info
+        provider: "emailpassword",
         profilePic: "",
         bio: "",
         isAdmin: false
@@ -172,6 +176,11 @@
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value;
 
+    // Validate email for @gmail.com
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      return showMessage("Please use a Gmail address (@gmail.com)", true);
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -190,14 +199,18 @@
     }
   });
 
-  // --- Social Login Function ---
-
   // Google Login function
   async function googleLogin() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+
+      // Validate email for @gmail.com
+      if (!user.email.toLowerCase().endsWith('@gmail.com')) {
+        await auth.signOut(); // Sign out if not a Gmail address
+        return showMessage("Please use a Gmail address (@gmail.com)", true);
+      }
 
       // Check if user document exists in Firestore
       const docSnap = await getDoc(doc(db, "users", user.uid));
@@ -209,8 +222,8 @@
           email: user.email,
           createdAt: new Date().toISOString(),
           lastLogin: new Date().toISOString(),
-          provider: "google", // Add provider info
-          profilePic: user.photoURL || "", // Use Google profile pic if available
+          provider: "google",
+          profilePic: user.photoURL || "",
           bio: "",
           isAdmin: false
         });
@@ -225,34 +238,30 @@
       // Redirect to the products page
       window.location.href = "index(Products) - AfterLog.html";
     } catch (error) {
-      // Handle errors (e.g., popup closed, auth failed)
       showMessage(error.message, true);
-      console.error("Google login error:", error); // Log error for debugging
+      console.error("Google login error:", error);
     }
   }
 
   // Add event listeners to social login buttons
   document.getElementById('google-login').addEventListener('click', googleLogin);
   document.getElementById('google-login-signin').addEventListener('click', googleLogin);
-  // Removed Facebook event listeners
 
-  // Optional: Forgot Password functionality (needs implementation)
+  // Optional: Forgot Password functionality
   document.getElementById('forgot-password').addEventListener('click', (e) => {
-      e.preventDefault();
-      // Implement forgot password logic here, likely using sendPasswordResetEmail
-      showMessage("Forgot password functionality not implemented yet.", false); // Or prompt for email
+    e.preventDefault();
+    showMessage("Forgot password functionality not implemented yet.", false);
   });
-
 </script>
 
 <script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
-        return false;
-      }
-    };
-  </script>
-  
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.onkeydown = function(e) {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+      return false;
+    }
+  };
+</script>
+
 </body>
 </html>
