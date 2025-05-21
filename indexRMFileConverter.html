@@ -1,0 +1,1344 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMFile Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-bg: #f5f7fa;
+            --dark-bg: #2c3e50;
+            --text-color: #333;
+            --light-text: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+.browse-btn1 {
+    display: inline-block;
+    background-color: rgb(42, 61, 67);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px; /* Changed to 330px */
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transform: translateY(-5px)
+}
+
+.browse-btn1:hover {
+    background-color: rgb(0, 0, 0);
+}
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+          font-family: "Ancizar Sans", sans-serif;
+            color: var(--dark-bg);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p{
+        font-family: "Share Tech", sans-serif;
+
+        }
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            color: var(--text-color);
+        }
+
+        .tab-button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .converter-options {
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .drop-area {
+            border: 2px dashed #ddd;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .drop-area:hover, .drop-area.dragover {
+            border-color: var(--primary-color);
+            background-color: #f0f8ff;
+        }
+
+        .drop-area p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .drop-area .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .file-info {
+            display: none;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background-color: #e8f4fd;
+        }
+
+        .file-info.visible {
+            display: block;
+        }
+
+        .file-info .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .convert-btn {
+            background-color: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+
+        .convert-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .download-btn {
+            background-color: #27ae60;
+            color: white;
+            flex: 1;
+            display: none;
+        }
+
+        .download-btn.visible {
+            display: block;
+        }
+
+        .download-btn:hover {
+            background-color: #219653;
+        }
+
+        .clear-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar-container.visible {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            min-height: 24px;
+        }
+
+        .error-message {
+            color: var(--accent-color);
+        }
+
+        .text-editor {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            margin: 20px auto;
+            display: block;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .image-preview.visible {
+            display: block;
+        }
+
+        .image-options {
+            display: none;
+        }
+
+        .image-options.visible {
+            display: block;
+        }
+
+        .resize-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .resize-group label {
+            margin-bottom: 0;
+        }
+
+        .resize-group input {
+            max-width: 100px;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .drop-area {
+                padding: 20px 10px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+            display: none;
+        }
+
+        .loader.visible {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&display=swap');
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
+</style>
+</head>
+<body>
+    
+    <div class="container">
+        <header>
+            <h1>RMFile Converter</h1>
+            <p class="subtitle">Convert Files WithOut Downlaod (Delete Everything In OneHour)</p>
+        </header>
+         <center>
+<a href="https://www.companyrm.lk/index(Products)%20-%20AfterLog.html" class="browse-btn1">Home</a>
+  </center>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="image">Image Converter</button>
+            <button class="tab-button" data-tab="document">Document Converter</button>
+            <button class="tab-button" data-tab="audio">Audio Converter</button>
+        </div>
+
+        <div id="image" class="tab-content active">
+            <div class="converter-options">
+                <div class="option-group">
+                    <label for="image-from">Convert from:</label>
+                    <select id="image-from">
+                        <option value="jpg">JPG</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WEBP</option>
+                        <option value="bmp">BMP</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="image-to">Convert to:</label>
+                    <select id="image-to">
+                        <option value="png">PNG</option>
+                        <option value="jpg">JPG</option>
+                        <option value="webp">WEBP</option>
+                        <option value="bmp">BMP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="drop-area" id="image-drop-area">
+                <div class="icon">📁</div>
+                <p>Drag & drop image files here</p>
+                <p>- or -</p>
+                <input type="file" id="image-file-input" accept="image/*" style="display: none;">
+                <button class="convert-btn" id="image-browse-btn">Browse Files</button>
+            </div>
+
+            <div class="file-info" id="image-file-info">
+                <p class="file-name" id="image-file-name"></p>
+                <p id="image-file-size"></p>
+            </div>
+
+            <img id="image-preview" class="image-preview" alt="Image Preview">
+
+            <div class="image-options" id="image-options">
+                <div class="option-group">
+                    <label>
+                        <input type="checkbox" id="resize-checkbox"> Resize image before conversion
+                    </label>
+                    <div id="resize-options" style="display: none; margin-top: 10px; padding-left: 15px;">
+                        <div class="resize-group">
+                            <label for="width-input">Width:</label>
+                            <input type="number" id="width-input" min="1" placeholder="Width in px">
+                            <span>px</span>
+                        </div>
+                        <div class="resize-group">
+                            <label for="height-input">Height:</label>
+                            <input type="number" id="height-input" min="1" placeholder="Height in px">
+                            <span>px</span>
+                        </div>
+                        <label>
+                            <input type="checkbox" id="maintain-aspect-ratio" checked> Maintain aspect ratio
+                        </label>
+                    </div>
+                </div>
+
+                <div class="option-group" id="jpg-options" style="display: none;">
+                    <label for="jpg-quality">JPEG Quality:</label>
+                    <input type="range" id="jpg-quality" min="0" max="100" value="90">
+                    <span id="jpg-quality-value">90%</span>
+                </div>
+
+                <div class="option-group" id="webp-options" style="display: none;">
+                    <label for="webp-quality">WebP Quality:</label>
+                    <input type="range" id="webp-quality" min="0" max="100" value="80">
+                    <span id="webp-quality-value">80%</span>
+                </div>
+            </div>
+
+            <div class="progress-bar-container" id="image-progress-container">
+                <div class="progress-bar" id="image-progress-bar"></div>
+            </div>
+
+            <div class="status-message" id="image-status">
+                <span class="loader" id="image-loader"></span>
+                <span id="image-status-text"></span>
+            </div>
+
+            <div class="button-group">
+                <button class="convert-btn" id="image-convert-btn" disabled>Convert</button>
+                <button class="download-btn" id="image-download-btn">Download</button>
+                <button class="clear-btn" id="image-clear-btn">Clear</button>
+            </div>
+        </div>
+
+        <div id="document" class="tab-content">
+            <div class="converter-options">
+                <div class="option-group">
+                    <label for="doc-conversion">Conversion Type:</label>
+                    <select id="doc-conversion">
+                        <option value="txt-to-pdf">TXT to PDF</option>
+                        <option value="html-to-txt">HTML to TXT</option>
+                        <option value="txt-to-html">TXT to HTML</option>
+                        <option value="docx-to-txt">DOCX to TXT</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="document-type-txt-pdf">
+                <div class="option-group">
+                    <label for="text-input">Enter text or</label>
+                    <textarea id="text-input" class="text-editor" placeholder="Type or paste your text here..."></textarea>
+                    <div class="drop-area" id="text-drop-area">
+                        <div class="icon">📄</div>
+                        <p>Drag & drop a text file here</p>
+                        <p>- or -</p>
+                        <input type="file" id="text-file-input" accept=".txt" style="display: none;">
+                        <button class="convert-btn" id="text-browse-btn">Browse Files</button>
+                    </div>
+                </div>
+
+                <div class="option-group" id="pdf-options">
+                    <label for="pdf-title">PDF Title (optional):</label>
+                    <input type="text" id="pdf-title" placeholder="Enter document title">
+                    <label for="pdf-font-size">Font Size:</label>
+                    <select id="pdf-font-size">
+                        <option value="10">10 pt</option>
+                        <option value="12" selected>12 pt</option>
+                        <option value="14">14 pt</option>
+                        <option value="16">16 pt</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="document-type-html" style="display: none;">
+                <div class="drop-area" id="html-drop-area">
+                    <div class="icon">📄</div>
+                    <p>Drag & drop an HTML file here</p>
+                    <p>- or -</p>
+                    <input type="file" id="html-file-input" accept=".html,.htm" style="display: none;">
+                    <button class="convert-btn" id="html-browse-btn">Browse Files</button>
+                </div>
+                <div class="option-group">
+                    <textarea id="html-editor" class="text-editor" placeholder="Or paste your HTML here..."></textarea>
+                </div>
+            </div>
+
+            <div id="document-type-docx" style="display: none;">
+                <div class="drop-area" id="docx-drop-area">
+                    <div class="icon">📄</div>
+                    <p>Drag & drop a DOCX file here</p>
+                    <p>- or -</p>
+                    <input type="file" id="docx-file-input" accept=".docx" style="display: none;">
+                    <button class="convert-btn" id="docx-browse-btn">Browse Files</button>
+                </div>
+            </div>
+
+            <div class="file-info" id="doc-file-info">
+                <p class="file-name" id="doc-file-name"></p>
+                <p id="doc-file-size"></p>
+            </div>
+
+            <div class="progress-bar-container" id="doc-progress-container">
+                <div class="progress-bar" id="doc-progress-bar"></div>
+            </div>
+
+            <div class="status-message" id="doc-status">
+                <span class="loader" id="doc-loader"></span>
+                <span id="doc-status-text"></span>
+            </div>
+
+            <div class="button-group">
+                <button class="convert-btn" id="doc-convert-btn">Convert</button>
+                <button class="download-btn" id="doc-download-btn">Download</button>
+                <button class="clear-btn" id="doc-clear-btn">Clear</button>
+            </div>
+        </div>
+
+        <div id="audio" class="tab-content">
+            <div class="converter-options">
+                <div class="option-group">
+                    <label for="audio-conversion">Conversion Type:</label>
+                    <select id="audio-conversion">
+                        <option value="wav-to-mp3">WAV to MP3</option>
+                        <option value="mp3-to-wav">MP3 to WAV</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="drop-area" id="audio-drop-area">
+                <div class="icon">🎵</div>
+                <p>Drag & drop audio files here</p>
+                <p>- or -</p>
+                <input type="file" id="audio-file-input" accept="audio/*" style="display: none;">
+                <button class="convert-btn" id="audio-browse-btn">Browse Files</button>
+            </div>
+
+            <div class="file-info" id="audio-file-info">
+                <p class="file-name" id="audio-file-name"></p>
+                <p id="audio-file-size"></p>
+            </div>
+
+            <audio id="audio-player" controls style="width: 100%; margin: 20px 0; display: none;"></audio>
+
+            <div class="option-group" id="mp3-options" style="display: none;">
+                <label for="mp3-bitrate">MP3 Bitrate:</label>
+                <select id="mp3-bitrate">
+                    <option value="128">128 kbps</option>
+                    <option value="192" selected>192 kbps</option>
+                    <option value="256">256 kbps</option>
+                    <option value="320">320 kbps</option>
+                </select>
+            </div>
+
+            <div class="progress-bar-container" id="audio-progress-container">
+                <div class="progress-bar" id="audio-progress-bar"></div>
+            </div>
+
+            <div class="status-message" id="audio-status">
+                <span class="loader" id="audio-loader"></span>
+                <span id="audio-status-text"></span>
+            </div>
+
+            <div class="button-group">
+                <button class="convert-btn" id="audio-convert-btn" disabled>Convert</button>
+                <button class="download-btn" id="audio-download-btn">Download</button>
+                <button class="clear-btn" id="audio-clear-btn">Clear</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>This file converter works entirely in your browser. Your files never leave your device.</p>
+        </footer>
+    </div>
+
+    <!-- pdfmake for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- lamejs for MP3 encoding -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+    <!-- mammoth.js for DOCX conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+    <script>
+        // Utility Functions
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        function setupDragAndDrop(dropArea, fileInput, callback) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            dropArea.addEventListener('dragenter', () => dropArea.classList.add('dragover'));
+            dropArea.addEventListener('dragover', () => dropArea.classList.add('dragover'));
+            dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+            dropArea.addEventListener('drop', e => {
+                dropArea.classList.remove('dragover');
+                callback(e);
+            });
+        }
+
+        // Tab Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById(button.getAttribute('data-tab')).classList.add('active');
+                });
+            });
+
+            // IMAGE CONVERTER FUNCTIONALITY
+            let imageFile = null;
+            let convertedImageBlob = null;
+
+            const imageDropArea = document.getElementById('image-drop-area');
+            const imageFileInput = document.getElementById('image-file-input');
+            const imageBrowseBtn = document.getElementById('image-browse-btn');
+            const imageFileInfo = document.getElementById('image-file-info');
+            const imageFileName = document.getElementById('image-file-name');
+            const imageFileSize = document.getElementById('image-file-size');
+            const imagePreview = document.getElementById('image-preview');
+            const imageOptions = document.getElementById('image-options');
+            const imageConvertBtn = document.getElementById('image-convert-btn');
+            const imageDownloadBtn = document.getElementById('image-download-btn');
+            const imageClearBtn = document.getElementById('image-clear-btn');
+            const imageProgressContainer = document.getElementById('image-progress-container');
+            const imageProgressBar = document.getElementById('image-progress-bar');
+            const imageStatus = document.getElementById('image-status');
+            const imageStatusText = document.getElementById('image-status-text');
+            const imageLoader = document.getElementById('image-loader');
+            const resizeCheckbox = document.getElementById('resize-checkbox');
+            const resizeOptions = document.getElementById('resize-options');
+            const widthInput = document.getElementById('width-input');
+            const heightInput = document.getElementById('height-input');
+            const maintainAspectRatio = document.getElementById('maintain-aspect-ratio');
+            const imageFromSelect = document.getElementById('image-from');
+            const imageToSelect = document.getElementById('image-to');
+            const jpgOptions = document.getElementById('jpg-options');
+            const webpOptions = document.getElementById('webp-options');
+            const jpgQuality = document.getElementById('jpg-quality');
+            const jpgQualityValue = document.getElementById('jpg-quality-value');
+            const webpQuality = document.getElementById('webp-quality');
+            const webpQualityValue = document.getElementById('webp-quality-value');
+
+            function showImageStatus(message, isError = false) {
+                imageStatusText.textContent = message;
+                imageStatus.classList.toggle('error-message', isError);
+            }
+
+            setupDragAndDrop(imageDropArea, imageFileInput, handleImageSelect);
+            imageBrowseBtn.addEventListener('click', () => imageFileInput.click());
+            imageFileInput.addEventListener('change', handleImageSelect);
+
+            resizeCheckbox.addEventListener('change', () => {
+                resizeOptions.style.display = resizeCheckbox.checked ? 'block' : 'none';
+            });
+
+            let originalWidth = 0;
+            let originalHeight = 0;
+            let aspectRatio = 1;
+
+            widthInput.addEventListener('input', () => {
+                if (maintainAspectRatio.checked && widthInput.value) {
+                    heightInput.value = Math.round(widthInput.value / aspectRatio);
+                }
+            });
+
+            heightInput.addEventListener('input', () => {
+                if (maintainAspectRatio.checked && heightInput.value) {
+                    widthInput.value = Math.round(heightInput.value * aspectRatio);
+                }
+            });
+
+            jpgQuality.addEventListener('input', () => {
+                jpgQualityValue.textContent = jpgQuality.value + '%';
+            });
+
+            webpQuality.addEventListener('input', () => {
+                webpQualityValue.textContent = webpQuality.value + '%';
+            });
+
+            imageToSelect.addEventListener('change', updateOutputOptions);
+
+            function updateOutputOptions() {
+                jpgOptions.style.display = imageToSelect.value === 'jpg' ? 'block' : 'none';
+                webpOptions.style.display = imageToSelect.value === 'webp' ? 'block' : 'none';
+            }
+
+            updateOutputOptions();
+
+            imageConvertBtn.addEventListener('click', convertImage);
+            imageDownloadBtn.addEventListener('click', downloadConvertedImage);
+            imageClearBtn.addEventListener('click', clearImageConverter);
+
+            function handleImageSelect(event) {
+                let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+                if (!file || !file.type.startsWith('image/')) {
+                    showImageStatus('Please select a valid image file.', true);
+                    return;
+                }
+
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (!['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(extension)) {
+                    showImageStatus('Unsupported image format.', true);
+                    return;
+                }
+
+                imageFile = file;
+                imageFileName.textContent = file.name;
+                imageFileSize.textContent = formatFileSize(file.size);
+                imageFileInfo.classList.add('visible');
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.add('visible');
+
+                    const img = new Image();
+                    img.onload = function() {
+                        originalWidth = img.width;
+                        originalHeight = img.height;
+                        aspectRatio = originalWidth / originalHeight;
+                        widthInput.value = originalWidth;
+                        heightInput.value = originalHeight;
+                    };
+                    img.src = e.target.result;
+
+                    imageOptions.classList.add('visible');
+                    imageConvertBtn.disabled = false;
+                    showImageStatus('');
+
+                    const format = extension === 'jpeg' ? 'jpg' : extension;
+                    imageFromSelect.value = format;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            async function convertImage() {
+                if (!imageFile) return;
+
+                imageProgressContainer.classList.add('visible');
+                imageProgressBar.style.width = '0%';
+                imageLoader.classList.add('visible');
+                showImageStatus('Converting image...');
+
+                try {
+                    const img = new Image();
+                    img.src = URL.createObjectURL(imageFile);
+                    await new Promise(resolve => img.onload = resolve);
+
+                    const canvas = document.createElement('canvas');
+                    let { width, height } = img;
+
+                    if (resizeCheckbox.checked) {
+                        width = parseInt(widthInput.value) || width;
+                        height = parseInt(heightInput.value) || height;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const outputFormat = imageToSelect.value;
+                    const quality = outputFormat === 'jpg' ? (jpgQuality.value / 100) : (outputFormat === 'webp' ? (webpQuality.value / 100) : 1);
+
+                    for (let i = 0; i <= 100; i += 10) {
+                        imageProgressBar.style.width = `${i}%`;
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+
+                    canvas.toBlob(blob => {
+                        convertedImageBlob = blob;
+                        imageDownloadBtn.classList.add('visible');
+                        imageLoader.classList.remove('visible');
+                        showImageStatus('Conversion complete!');
+                        URL.revokeObjectURL(img.src);
+                    }, `image/${outputFormat === 'jpg' ? 'jpeg' : outputFormat}`, quality);
+                } catch (error) {
+                    showImageStatus('Error converting image. Please try again.', true);
+                    imageLoader.classList.remove('visible');
+                    imageProgressContainer.classList.remove('visible');
+                }
+            }
+
+            function downloadConvertedImage() {
+                if (!convertedImageBlob) return;
+                const url = URL.createObjectURL(convertedImageBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `converted.${imageToSelect.value}`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            function clearImageConverter() {
+                imageFile = null;
+                convertedImageBlob = null;
+                imageFileInput.value = '';
+                imageFileInfo.classList.remove('visible');
+                imagePreview.classList.remove('visible');
+                imageOptions.classList.remove('visible');
+                imageConvertBtn.disabled = true;
+                imageDownloadBtn.classList.remove('visible');
+                imageProgressContainer.classList.remove('visible');
+                imageProgressBar.style.width = '0%';
+                imageLoader.classList.remove('visible');
+                showImageStatus('');
+                resizeCheckbox.checked = false;
+                resizeOptions.style.display = 'none';
+                widthInput.value = '';
+                heightInput.value = '';
+            }
+
+            // DOCUMENT CONVERTER FUNCTIONALITY
+            let docFile = null;
+            let convertedDocBlob = null;
+
+            const docConversionSelect = document.getElementById('doc-conversion');
+            const textDropArea = document.getElementById('text-drop-area');
+            const textFileInput = document.getElementById('text-file-input');
+            const textBrowseBtn = document.getElementById('text-browse-btn');
+            const htmlDropArea = document.getElementById('html-drop-area');
+            const htmlFileInput = document.getElementById('html-file-input');
+            const htmlBrowseBtn = document.getElementById('html-browse-btn');
+            const docxDropArea = document.getElementById('docx-drop-area');
+            const docxFileInput = document.getElementById('docx-file-input');
+            const docxBrowseBtn = document.getElementById('docx-browse-btn');
+            const textInput = document.getElementById('text-input');
+            const htmlEditor = document.getElementById('html-editor');
+            const pdfTitle = document.getElementById('pdf-title');
+            const pdfFontSize = document.getElementById('pdf-font-size');
+            const docFileInfo = document.getElementById('doc-file-info');
+            const docFileName = document.getElementById('doc-file-name');
+            const docFileSize = document.getElementById('doc-file-size');
+            const docProgressContainer = document.getElementById('doc-progress-container');
+            const docProgressBar = document.getElementById('doc-progress-bar');
+            const docStatus = document.getElementById('doc-status');
+            const docStatusText = document.getElementById('doc-status-text');
+            const docLoader = document.getElementById('doc-loader');
+            const docConvertBtn = document.getElementById('doc-convert-btn');
+            const docDownloadBtn = document.getElementById('doc-download-btn');
+            const docClearBtn = document.getElementById('doc-clear-btn');
+
+            function showDocStatus(message, isError = false) {
+                docStatusText.textContent = message;
+                docStatus.classList.toggle('error-message', isError);
+            }
+
+            function updateDocumentInterface() {
+                const conversionType = docConversionSelect.value;
+                document.getElementById('document-type-txt-pdf').style.display = 'none';
+                document.getElementById('document-type-html').style.display = 'none';
+                document.getElementById('document-type-docx').style.display = 'none';
+                docFileInfo.classList.remove('visible');
+                docConvertBtn.disabled = true;
+
+                if (conversionType === 'txt-to-pdf') {
+                    document.getElementById('document-type-txt-pdf').style.display = 'block';
+                    docConvertBtn.disabled = !textInput.value;
+                } else if (conversionType === 'html-to-txt' || conversionType === 'txt-to-html') {
+                    document.getElementById('document-type-html').style.display = 'block';
+                } else if (conversionType === 'docx-to-txt') {
+                    document.getElementById('document-type-docx').style.display = 'block';
+                }
+            }
+
+            docConversionSelect.addEventListener('change', updateDocumentInterface);
+            setupDragAndDrop(textDropArea, textFileInput, handleDocSelect);
+            setupDragAndDrop(htmlDropArea, htmlFileInput, handleDocSelect);
+            setupDragAndDrop(docxDropArea, docxFileInput, handleDocSelect);
+            textBrowseBtn.addEventListener('click', () => textFileInput.click());
+            htmlBrowseBtn.addEventListener('click', () => htmlFileInput.click());
+            docxBrowseBtn.addEventListener('click', () => docxFileInput.click());
+            textFileInput.addEventListener('change', handleDocSelect);
+            htmlFileInput.addEventListener('change', handleDocSelect);
+            docxFileInput.addEventListener('change', handleDocSelect);
+            textInput.addEventListener('input', () => {
+                if (docConversionSelect.value === 'txt-to-pdf') {
+                    docConvertBtn.disabled = !textInput.value;
+                }
+            });
+            htmlEditor.addEventListener('input', () => {
+                if (docConversionSelect.value === 'html-to-txt') {
+                    docConvertBtn.disabled = !htmlEditor.value;
+                }
+            });
+            docConvertBtn.addEventListener('click', convertDocument);
+            docDownloadBtn.addEventListener('click', downloadConvertedDocument);
+            docClearBtn.addEventListener('click', clearDocumentConverter);
+
+            function handleDocSelect(event) {
+                let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+                if (!file) return;
+
+                const conversionType = docConversionSelect.value;
+                const extension = file.name.split('.').pop().toLowerCase();
+
+                if (conversionType === 'txt-to-pdf' && extension !== 'txt') {
+                    showDocStatus('Please select a valid TXT file.', true);
+                    return;
+                }
+                if ((conversionType === 'html-to-txt' || conversionType === 'txt-to-html') && !['html', 'htm'].includes(extension)) {
+                    showDocStatus('Please select a valid HTML file.', true);
+                    return;
+                }
+                if (conversionType === 'docx-to-txt' && extension !== 'docx') {
+                    showDocStatus('Please select a valid DOCX file.', true);
+                    return;
+                }
+
+                docFile = file;
+                docFileName.textContent = file.name;
+                docFileSize.textContent = formatFileSize(file.size);
+                docFileInfo.classList.add('visible');
+                docConvertBtn.disabled = false;
+                showDocStatus('');
+
+                if (conversionType === 'txt-to-pdf') {
+                    file.text().then(text => {
+                        textInput.value = text;
+                    });
+                } else if (conversionType === 'html-to-txt' || conversionType === 'txt-to-html') {
+                    file.text().then(text => {
+                        htmlEditor.value = text;
+                    });
+                }
+            }
+
+            async function convertDocument() {
+                const conversionType = docConversionSelect.value;
+                docProgressContainer.classList.add('visible');
+                docProgressBar.style.width = '0%';
+                docLoader.classList.add('visible');
+                showDocStatus('Converting document...');
+
+                try {
+                    if (conversionType === 'txt-to-pdf') {
+                        const text = textInput.value || (docFile ? await docFile.text() : '');
+                        if (!text) throw new Error('No text provided');
+
+                        const docDefinition = {
+                            content: [
+                                { text: pdfTitle.value || 'Converted Document', style: 'header' },
+                                { text: text }
+                            ],
+                            styles: {
+                                header: { fontSize: parseInt(pdfFontSize.value), bold: true, margin: [0, 0, 0, 10] }
+                            }
+                        };
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            docProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        pdfMake.createPdf(docDefinition).getBlob(blob => {
+                            convertedDocBlob = blob;
+                            docDownloadBtn.classList.add('visible');
+                            docLoader.classList.remove('visible');
+                            showDocStatus('Conversion complete!');
+                        });
+                    } else if (conversionType === 'html-to-txt') {
+                        const html = htmlEditor.value || (docFile ? await docFile.text() : '');
+                        if (!html) throw new Error('No HTML content provided');
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const text = doc.body.textContent || '';
+                        convertedDocBlob = new Blob([text], { type: 'text/plain' });
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            docProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        docDownloadBtn.classList.add('visible');
+                        docLoader.classList.remove('visible');
+                        showDocStatus('Conversion complete!');
+                    } else if (conversionType === 'txt-to-html') {
+                        const text = textInput.value || (docFile ? await docFile.text() : '');
+                        if (!text) throw new Error('No text provided');
+
+                        const htmlContent = `<!DOCTYPE html><html><body><pre>${text}</pre></body></html>`;
+                        convertedDocBlob = new Blob([htmlContent], { type: 'text/html' });
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            docProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        docDownloadBtn.classList.add('visible');
+                        docLoader.classList.remove('visible');
+                        showDocStatus('Conversion complete!');
+                    } else if (conversionType === 'docx-to-txt') {
+                        if (!docFile) throw new Error('No DOCX file provided');
+
+                        const arrayBuffer = await docFile.arrayBuffer();
+                        const result = await mammoth.extractRawText({ arrayBuffer });
+                        convertedDocBlob = new Blob([result.value], { type: 'text/plain' });
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            docProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        docDownloadBtn.classList.add('visible');
+                        docLoader.classList.remove('visible');
+                        showDocStatus('Conversion complete!');
+                    }
+                } catch (error) {
+                    showDocStatus(`Error: ${error.message}`, true);
+                    docLoader.classList.remove('visible');
+                    docProgressContainer.classList.remove('visible');
+                }
+            }
+
+            function downloadConvertedDocument() {
+                if (!convertedDocBlob) return;
+                const url = URL.createObjectURL(convertedDocBlob);
+                const a = document.createElement('a');
+                const extension = docConversionSelect.value === 'txt-to-pdf' ? 'pdf' : (docConversionSelect.value === 'txt-to-html' ? 'html' : 'txt');
+                a.href = url;
+                a.download = `converted.${extension}`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            function clearDocumentConverter() {
+                docFile = null;
+                convertedDocBlob = null;
+                textFileInput.value = '';
+                htmlFileInput.value = '';
+                docxFileInput.value = '';
+                textInput.value = '';
+                htmlEditor.value = '';
+                pdfTitle.value = '';
+                docFileInfo.classList.remove('visible');
+                docConvertBtn.disabled = true;
+                docDownloadBtn.classList.remove('visible');
+                docProgressContainer.classList.remove('visible');
+                docProgressBar.style.width = '0%';
+                docLoader.classList.remove('visible');
+                showDocStatus('');
+            }
+
+            updateDocumentInterface();
+
+            // AUDIO CONVERTER FUNCTIONALITY
+            let audioFile = null;
+            let convertedAudioBlob = null;
+
+            const audioDropArea = document.getElementById('audio-drop-area');
+            const audioFileInput = document.getElementById('audio-file-input');
+            const audioBrowseBtn = document.getElementById('audio-browse-btn');
+            const audioFileInfo = document.getElementById('audio-file-info');
+            const audioFileName = document.getElementById('audio-file-name');
+            const audioFileSize = document.getElementById('audio-file-size');
+            const audioPlayer = document.getElementById('audio-player');
+            const audioConversionSelect = document.getElementById('audio-conversion');
+            const mp3Options = document.getElementById('mp3-options');
+            const mp3Bitrate = document.getElementById('mp3-bitrate');
+            const audioProgressContainer = document.getElementById('audio-progress-container');
+            const audioProgressBar = document.getElementById('audio-progress-bar');
+            const audioStatus = document.getElementById('audio-status');
+            const audioStatusText = document.getElementById('audio-status-text');
+            const audioLoader = document.getElementById('audio-loader');
+            const audioConvertBtn = document.getElementById('audio-convert-btn');
+            const audioDownloadBtn = document.getElementById('audio-download-btn');
+            const audioClearBtn = document.getElementById('audio-clear-btn');
+
+            function showAudioStatus(message, isError = false) {
+                audioStatusText.textContent = message;
+                audioStatus.classList.toggle('error-message', isError);
+            }
+
+            audioConversionSelect.addEventListener('change', () => {
+                mp3Options.style.display = audioConversionSelect.value === 'wav-to-mp3' ? 'block' : 'none';
+            });
+
+            setupDragAndDrop(audioDropArea, audioFileInput, handleAudioSelect);
+            audioBrowseBtn.addEventListener('click', () => audioFileInput.click());
+            audioFileInput.addEventListener('change', handleAudioSelect);
+            audioConvertBtn.addEventListener('click', convertAudio);
+            audioDownloadBtn.addEventListener('click', downloadConvertedAudio);
+            audioClearBtn.addEventListener('click', clearAudioConverter);
+
+            function handleAudioSelect(event) {
+                let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+                if (!file) return;
+
+                const conversionType = audioConversionSelect.value;
+                const extension = file.name.split('.').pop().toLowerCase();
+
+                if (conversionType === 'wav-to-mp3' && extension !== 'wav') {
+                    showAudioStatus('Please select a valid WAV file.', true);
+                    return;
+                }
+                if (conversionType === 'mp3-to-wav' && extension !== 'mp3') {
+                    showAudioStatus('Please select a valid MP3 file.', true);
+                    return;
+                }
+
+                audioFile = file;
+                audioFileName.textContent = file.name;
+                audioFileSize.textContent = formatFileSize(file.size);
+                audioFileInfo.classList.add('visible');
+                audioPlayer.src = URL.createObjectURL(file);
+                audioPlayer.style.display = 'block';
+                audioConvertBtn.disabled = false;
+                showAudioStatus('');
+            }
+
+            async function convertAudio() {
+                if (!audioFile) return;
+
+                audioProgressContainer.classList.add('visible');
+                audioProgressBar.style.width = '0%';
+                audioLoader.classList.add('visible');
+                showAudioStatus('Converting audio...');
+
+                try {
+                    const conversionType = audioConversionSelect.value;
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const arrayBuffer = await audioFile.arrayBuffer();
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    if (conversionType === 'wav-to-mp3') {
+                        const wavData = audioBuffer.getChannelData(0);
+                        const sampleRate = audioBuffer.sampleRate;
+                        const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, parseInt(mp3Bitrate.value));
+                        const mp3Data = [];
+                        const samples = new Int16Array(wavData.length);
+                        for (let i = 0; i < wavData.length; i++) {
+                            samples[i] = wavData[i] * 32767;
+                        }
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            audioProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        const mp3Buffer = mp3encoder.encodeBuffer(samples);
+                        const endBuffer = mp3encoder.flush();
+                        mp3Data.push(mp3Buffer, endBuffer);
+                        convertedAudioBlob = new Blob(mp3Data, { type: 'audio/mp3' });
+                    } else if (conversionType === 'mp3-to-wav') {
+                        const numChannels = audioBuffer.numberOfChannels;
+                        const sampleRate = audioBuffer.sampleRate;
+                        const format = 1; // PCM
+                        const bitsPerSample = 16;
+                        const dataLength = audioBuffer.length * numChannels * (bitsPerSample / 8);
+                        const buffer = new ArrayBuffer(44 + dataLength);
+                        const view = new DataView(buffer);
+
+                        // WAV header
+                        view.setUint32(0, 0x52494646, false); // "RIFF"
+                        view.setUint32(4, 36 + dataLength, true); // File size - 8
+                        view.setUint32(8, 0x57415645, false); // "WAVE"
+                        view.setUint32(12, 0x666d7420, false); // "fmt "
+                        view.setUint32(16, 16, true); // Subchunk1 size
+                        view.setUint16(20, format, true); // Audio format
+                        view.setUint16(22, numChannels, true); // Number of channels
+                        view.setUint32(24, sampleRate, true); // Sample rate
+                        view.setUint32(28, sampleRate * numChannels * (bitsPerSample / 8), true); // Byte rate
+                        view.setUint16(32, numChannels * (bitsPerSample / 8), true); // Block align
+                        view.setUint16(34, bitsPerSample, true); // Bits per sample
+                        view.setUint32(36, 0x64617461, false); // "data"
+                        view.setUint32(40, dataLength, true); // Data size
+
+                        const samples = audioBuffer.getChannelData(0);
+                        for (let i = 0; i < samples.length; i++) {
+                            view.setInt16(44 + i * 2, samples[i] * 32767, true);
+                        }
+
+                        for (let i = 0; i <= 100; i += 10) {
+                            audioProgressBar.style.width = `${i}%`;
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+
+                        convertedAudioBlob = new Blob([buffer], { type: 'audio/wav' });
+                    }
+
+                    audioDownloadBtn.classList.add('visible');
+                    audioLoader.classList.remove('visible');
+                    showAudioStatus('Conversion complete!');
+                    audioContext.close();
+                } catch (error) {
+                    showAudioStatus('Error converting audio. Please try again.', true);
+                    audioLoader.classList.remove('visible');
+                    audioProgressContainer.classList.remove('visible');
+                }
+            }
+
+            function downloadConvertedAudio() {
+                if (!convertedAudioBlob) return;
+                const url = URL.createObjectURL(convertedAudioBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `converted.${audioConversionSelect.value === 'wav-to-mp3' ? 'mp3' : 'wav'}`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            function clearAudioConverter() {
+                audioFile = null;
+                convertedAudioBlob = null;
+                audioFileInput.value = '';
+                audioFileInfo.classList.remove('visible');
+                audioPlayer.style.display = 'none';
+                audioConvertBtn.disabled = true;
+                audioDownloadBtn.classList.remove('visible');
+                audioProgressContainer.classList.remove('visible');
+                audioProgressBar.style.width = '0%';
+                audioLoader.classList.remove('visible');
+                showAudioStatus('');
+            }
+        });
+    </script>
+
+<!-- Endcription -->
+
+ <script>
+    // Disable Right Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+C
+    document.onkeydown = function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        return false;
+      }
+    };
+
+    // Detect if DevTools is open
+    const element = new Image();
+    Object.defineProperty(element, 'id', {
+      get: function () {
+        alert("DevTools is open. Site functionality may be limited.");
+      }
+    });
+    console.log('%c', element);
+  </script>
+    
+
+
+</body>
+</html>
