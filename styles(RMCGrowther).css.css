@@ -1,0 +1,615 @@
+:root {
+    --accent-gradient: linear-gradient(90deg, #ffffff, #22fff8);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Savate:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: linear-gradient(135deg, #070b1c 0%, #08368c 100%);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #e53e3e;
+}
+
+.logo-img {
+  height: 55px; /* Adjust as needed */
+  width: auto; /* Maintain aspect ratio */
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #e53e3e;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #c53030;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #e53e3e;
+  border: 2px solid #e53e3e;
+}
+
+.btn-outline:hover {
+  background: #e53e3e;
+  color: white;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 80px 0;
+  color: white;
+}
+
+.hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 48px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.hero p {
+  font-family: "Oswald", sans-serif;
+  font-size: 20px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+  /* Social Logos Section */
+        .social-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Space between logos and 'X' */
+            margin-top: 40px; /* Space below hero content */
+        }
+
+        .social-logos img {
+            width: 60px; /* Adjust size of logos */
+            height: 60px;
+            border-radius: 50%; /* Make them circular if desired */
+            transition: transform 0.3s ease;
+        }
+
+        .social-logos img:hover {
+            transform: scale(1.1); /* Slight zoom on hover */
+        }
+
+        .social-logos .separator-x {
+            font-size: 39px;
+            font-weight: bold;
+            color: white; /* Color of the 'X' */
+        }
+        .social-logos-text {
+          text-align: center;
+          font-family: "Alfa Slab One", serif;
+          color: white; /* Or any other color that fits your design */
+          font-size: 40px; /* Adjust font size as needed */
+          font-weight: 500;
+          margin-top: 10px; /* Space between the logos and this text */
+        }
+        .highlight {
+          background: var(--accent-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.feature {
+  font-family: "Alumni Sans SC", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+}
+
+.feature i {
+  font-size: 20px;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 30px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header h2 {
+  font-family: "Alfa Slab One", serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+ 
+  align-items: center;
+  gap: 10px;
+}
+
+.card-header p {
+  font-family: "Playfair Display", serif;
+  color: #64748b;
+  font-size: 20px;
+}
+
+.card-body {
+  padding: 30px;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #e53e3e;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: auto;
+}
+
+.checkbox-item label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* URL Container */
+.url-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.url-container input {
+  flex: 1;
+}
+
+.help-text {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  padding: 30px 30px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close:hover {
+  color: #000;
+}
+
+.modal-body {
+  padding: 20px 30px 30px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: #e53e3e;
+  border-bottom-color: #e53e3e;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Unlock Page */
+.unlock-page {
+  padding: 40px 0;
+}
+
+.unlock-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}
+
+.unlock-header h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.unlock-header p {
+  font-family: "Oswald", sans-serif;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* Task Items */
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.task-item.completed {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.task-info i {
+  font-size: 20px;
+  color: #e53e3e;
+  width: 24px;
+}
+
+.task-details h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.task-details p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.task-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* Reward Section */
+.reward-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.reward-icon {
+  font-size: 48px;
+  color: #f59e0b;
+  margin-bottom: 20px;
+}
+
+.reward-content h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.reward-content p {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+#rewardCard.success {
+  border: 2px solid #10b981;
+  background: #f0fdf4;
+}
+
+#rewardCard.success .reward-icon {
+  color: #10b981;
+}
+
+#rewardCard.success h3 {
+  color: #166534;
+}
+
+/* Not Found */
+.not-found {
+  text-align: center;
+  color: white;
+  padding: 60px 20px;
+}
+
+.not-found h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.not-found p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+.loading i {
+  font-size: 32px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    .social-logos-text {
+        font-size: 16px; /* Smaller font on small screens */
+    }
+}
+
+  .features {
+    gap: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .url-container {
+    flex-direction: column;
+  }
+
+  .task-item {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .modal-content {
+    margin: 10% auto;
+    width: 95%;
+  }
+
+  .nav {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 0;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 20px;
+  }
+
+  .hero {
+    padding: 40px 0;
+  }
+
+  .unlock-page {
+    padding: 20px 0;
+  }
+}

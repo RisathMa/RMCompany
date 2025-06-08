@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMCGrowther</title>
+    <link rel="stylesheet" href="styles(RMCGrowther).css.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Savate:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">     
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Savate:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<link rel="shortcut icon" href="CLogo.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+    <div class="container">
+        <div class="nav">
+            <div class="logo">
+                <img src="Logo.jpg" alt="RMCGrowther Logo" class="logo-img">
+                
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="openAuthModal('signin')">Sign In</button>
+                <button class="btn btn-primary" onclick="openAuthModal('signup')">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Grow Your YouTube Or Any Channel Fast</h1>
+            <p>Get more subscribers, likes, and views by offering rewards to your audience</p>
+            
+            
+            <!-- New Social Logos Section -->
+                <div class="social-logos">
+                    <a href="https://www.companyrm.lk" target="_blank" rel="noopener noreferrer">
+                        <img src="Logo-modified (1).png" alt="CompanyRM">
+                    </a>
+                    <span class="separator-x">X</span>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="CLogo.png" alt="RMCGrowther">
+                    </a>
+                </div>
+            <!-- End Social Logos Section -->
+
+            <br>
+
+            <center><div class="social-logos-text">
+                <p><span class="highlight">CompanyRm X RmCGrowther</p></span>
+            </div></center>
+
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <span>More Subscribers</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-heart"></i>
+                    <span>More Likes</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-eye"></i>
+                    <span>More Views</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Form -->
+    <section class="main-form">
+        <div class="container">
+            <div class="card">
+                <Center><div class="card-header">
+                    <h2><i class="fas fa-magic"></i> Create Your Unlock Campaign</h2>
+                    <p>Set up tasks for users to complete and offer them rewards</p>
+                </div></Center>
+                <div class="card-body">
+                    <form id="campaignForm">
+                        <!-- YouTube URLs -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="channelUrl">YouTube Channel URL</label>
+                                <input type="url" id="channelUrl" placeholder="https://youtube.com/@yourchannel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoUrl">Video URL (Optional)</label>
+                                <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=...">
+                            </div>
+                        </div>
+
+                        <!-- Tasks Selection -->
+                        <div class="form-group">
+                            <label>What do you want users to do?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="subscribe" name="tasks" value="subscribe">
+                                    <label for="subscribe">
+                                        <i class="fas fa-users"></i>
+                                        Subscribe to Channel
+                                    </label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="like" name="tasks" value="like">
+                                    <label for="like">
+                                        <i class="fas fa-heart"></i>
+                                        Like Video
+                                    </label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="watch" name="tasks" value="watch">
+                                    <label for="watch">
+                                        <i class="fas fa-eye"></i>
+                                        Watch Video
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reward Details -->
+                        <div class="form-group">
+                            <label>Reward Details</label>
+                            <div class="form-row">
+                                <input type="text" id="rewardTitle" placeholder="Reward Title (e.g., Free eBook)" required>
+                                <input type="url" id="rewardUrl" placeholder="Reward URL or Link" required>
+                            </div>
+                            <textarea id="rewardDescription" placeholder="Describe your reward..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full" id="generateBtn">
+                            <i class="fas fa-link"></i>
+                            Generate Unlock URL
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Generated URL -->
+            <div class="card" id="generatedUrlCard" style="display: none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-link"></i> Your Unlock URL is Ready!</h2>
+                </div>
+                <div class="card-body">
+                    <div class="url-container">
+                        <input type="text" id="generatedUrl" readonly>
+                        <button class="btn btn-primary" onclick="copyToClipboard()">
+                            <i class="fas fa-copy"></i>
+                            Copy
+                        </button>
+                    </div>
+                    <p class="help-text">Share this URL with your audience. They'll need to complete the tasks to unlock your reward.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Sub4Unlock</h2>
+                <span class="close" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+                    <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+                
+                <div id="signinTab" class="tab-content active">
+                    <form id="signinForm">
+                        <div class="form-group">
+                            <label for="signinEmail">Email</label>
+                            <input type="email" id="signinEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signinPassword">Password</label>
+                            <input type="password" id="signinPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                    </form>
+                </div>
+
+                <div id="signupTab" class="tab-content">
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script(RMCGrowther).js"></script>
+</body>
+</html>
