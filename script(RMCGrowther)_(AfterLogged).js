@@ -63,7 +63,7 @@ async function handleCampaignSubmit(e) {
     saveCampaignData(campaignId, formData)
 
     // Generate and display URL
-    const unlockUrl = `${window.location.origin}unlock_AL.html/?id=${campaignId}`
+    const unlockUrl = `${window.location.origin}/unlock_AL.html?id=${campaignId}
     displayGeneratedUrl(unlockUrl)
   } catch (error) {
     alert(error.message)
