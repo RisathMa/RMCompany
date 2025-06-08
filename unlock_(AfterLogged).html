@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Tasks RMCGrowther</title>
+    <link rel="stylesheet" href="styles(RMCGrowther).css.css">
+          <link rel="shortcut icon" href="CLogo.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+   <!-- Header -->
+<header class="header">
+    <div class="container">
+        <div class="nav">
+            <div class="logo">
+                <a href="www.companyrm.lk" title="RMCGrowther Home">
+                    <img src="Logo.jpg" alt="RMCGrowther Logo" class="logo-img">
+                </a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="openAuthModal('signin')">Sign In</button>
+                <button class="btn btn-primary" onclick="openAuthModal('signup')">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Main Content -->
+    <section class="unlock-page">
+        <div class="container">
+            <div class="unlock-header">
+                <h1>Complete Tasks to Unlock Reward</h1>
+                <p>Complete the tasks below to unlock: <strong id="rewardTitle">Loading...</strong></p>
+            </div>
+
+            <!-- Tasks Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Required Tasks</h2>
+                    <p>Click each button to complete the task on YouTube</p>
+                </div>
+                <div class="card-body">
+                    <div id="tasksList">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reward Card -->
+            <div class="card" id="rewardCard">
+                <div class="card-body">
+                    <div class="reward-content">
+                        <i class="fas fa-gift reward-icon"></i>
+                        <h3 id="rewardCardTitle">Complete all tasks to unlock your reward</h3>
+                        <p id="rewardCardDescription">Loading...</p>
+                        <button id="claimRewardBtn" class="btn btn-primary btn-full" style="display: none;" onclick="claimReward()">
+                            <i class="fas fa-external-link-alt"></i>
+                            Claim Your Reward
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Not Found Message -->
+            <div id="notFoundMessage" class="not-found" style="display: none;">
+                <h2>Campaign Not Found</h2>
+                <p>This unlock URL may be invalid or expired.</p>
+                <a href="index.html" class="btn btn-primary">Go Back Home</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Sub4Unlock</h2>
+                <span class="close" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+                    <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+                
+                <div id="signinTab" class="tab-content active">
+                    <form id="signinForm">
+                        <div class="form-group">
+                            <label for="signinEmail">Email</label>
+                            <input type="email" id="signinEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signinPassword">Password</label>
+                            <input type="password" id="signinPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                    </form>
+                </div>
+
+                <div id="signupTab" class="tab-content">
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="unlock.js"></script>
+</body>
+</html>
